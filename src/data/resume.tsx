@@ -235,6 +235,168 @@ export const DATA = {
       image: "",
       video: "",
     },
+    {
+      title: "Campus Tutor",
+      href: "https://github.com/Chy-Zaber-Bin-Zahid/Campus-Tutor",
+      dates: "2025",
+      active: true,
+      description:
+        "Web platform connecting students with campus tutors. Built with Next.js and TypeScript.",
+      technologies: ["Next.js", "TypeScript", "React", "Tailwind CSS"],
+      links: [
+        {
+          type: "Website",
+          href: "https://campustutor.vercel.app/",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/Chy-Zaber-Bin-Zahid/Campus-Tutor",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+      image: "",
+      video: "",
+    },
+    {
+      title: "Tech Companies in Bangladesh",
+      href: "https://github.com/Chy-Zaber-Bin-Zahid/Tech-Companies-in-Bangladesh",
+      dates: "2025",
+      active: true,
+      description:
+        "Open-source web app that serves as a directory of technology companies in Bangladesh. Provides a searchable and sortable table of companies with names, office locations, technologies used, and links to their online presence — built to help developers find jobs.",
+      technologies: ["Next.js", "TypeScript", "React", "Tailwind CSS"],
+      links: [
+        {
+          type: "Website",
+          href: "https://techcobd.vercel.app/",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/Chy-Zaber-Bin-Zahid/Tech-Companies-in-Bangladesh",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+      image: "",
+      video: "",
+    },
+    {
+      title: "Video Chat App",
+      href: "https://github.com/Chy-Zaber-Bin-Zahid/Video-chat-app",
+      dates: "2025",
+      active: true,
+      description:
+        "Simple peer-to-peer video chat app built with React, Node.js, and WebRTC. Connect with friends instantly by sharing a room ID — no registration required.",
+      technologies: ["React", "Node.js", "WebRTC", "JavaScript"],
+      links: [
+        {
+          type: "Website",
+          href: "https://video-chat-app-gjy8.onrender.com/",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/Chy-Zaber-Bin-Zahid/Video-chat-app",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+      image: "",
+      video: "",
+    },
+    {
+      title: "CodeSync5",
+      href: "https://github.com/Chy-Zaber-Bin-Zahid/CodeSync5",
+      dates: "2024",
+      active: true,
+      description:
+        "Marketing site for CodeSync5 — an IT company specializing in AI, web and mobile development, eCommerce, UI/UX, and graphic design. Designed to deliver tailored solutions blending creativity and technology.",
+      technologies: ["Next.js", "TypeScript", "React", "Tailwind CSS"],
+      links: [
+        {
+          type: "Website",
+          href: "https://codesync5.vercel.app/",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/Chy-Zaber-Bin-Zahid/CodeSync5",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+      image: "",
+      video: "",
+    },
+    {
+      title: "Hasan Here",
+      href: "https://github.com/Chy-Zaber-Bin-Zahid/Hasan-Here",
+      dates: "2024 - 2025",
+      active: true,
+      description:
+        "Interactive IELTS preparation website providing users with practice tests for the Reading and Listening sections of the IELTS exam. Built with Next.js and React with a focus on creating an engaging and user-friendly experience for IELTS test-takers.",
+      technologies: ["Next.js", "TypeScript", "React", "Tailwind CSS"],
+      links: [
+        {
+          type: "Website",
+          href: "https://hasanhere.vercel.app",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/Chy-Zaber-Bin-Zahid/Hasan-Here",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+      image: "",
+      video: "",
+    },
+    {
+      title: "Valorant Match Tracker",
+      href: "https://github.com/Chy-Zaber-Bin-Zahid/Valorant-Match-Tracker",
+      dates: "2024",
+      active: true,
+      description:
+        "Web app that fetches and displays the last 9–10 match history of any Valorant player by providing their in-game name and tag, using the Riot Games API.",
+      technologies: ["JavaScript", "React", "Riot API"],
+      links: [
+        {
+          type: "Source",
+          href: "https://github.com/Chy-Zaber-Bin-Zahid/Valorant-Match-Tracker",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+      image: "",
+      video: "",
+    },
+    {
+      title: "Smart Tech",
+      href: "https://github.com/Chy-Zaber-Bin-Zahid/Smart-Tech",
+      dates: "2024",
+      active: true,
+      description:
+        "High-performance MERN-stack e-commerce web app inspired by Bangladesh's renowned Star Tech, featuring product listings, cart, and checkout flows built on MongoDB, Express.js, React, and Node.js.",
+      technologies: [
+        "React",
+        "Node.js",
+        "Express",
+        "MongoDB",
+        "JavaScript",
+      ],
+      links: [
+        {
+          type: "Website",
+          href: "https://smart-tech-47.netlify.app/",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/Chy-Zaber-Bin-Zahid/Smart-Tech",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+      image: "",
+      video: "",
+    },
   ],
   hackathons: [],
 } as const;

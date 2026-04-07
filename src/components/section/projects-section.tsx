@@ -1,10 +1,20 @@
+"use client";
+
+import { useState } from "react";
 import BlurFade from "@/components/magicui/blur-fade";
 import { ProjectCard } from "@/components/project-card";
 import { DATA } from "@/data/resume";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 const BLUR_FADE_DELAY = 0.04;
+const INITIAL_COUNT = 4;
 
 export default function ProjectsSection() {
+    const [expanded, setExpanded] = useState(false);
+    const projects = DATA.projects;
+    const visibleProjects = expanded ? projects : projects.slice(0, INITIAL_COUNT);
+    const hasMore = projects.length > INITIAL_COUNT;
+
     return (
         <section id="projects">
             <div className="flex min-h-0 flex-col gap-y-8">
@@ -32,7 +42,7 @@ export default function ProjectsSection() {
                     </div>
                 </div>
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-[800px] mx-auto auto-rows-fr">
-                    {DATA.projects.map((project, id) => (
+                    {visibleProjects.map((project, id) => (
                         <BlurFade
                             key={project.title}
                             delay={BLUR_FADE_DELAY * 12 + id * 0.05}
@@ -52,8 +62,28 @@ export default function ProjectsSection() {
                         </BlurFade>
                     ))}
                 </div>
+                {hasMore && (
+                    <div className="flex justify-center">
+                        <button
+                            type="button"
+                            onClick={() => setExpanded((prev) => !prev)}
+                            className="inline-flex items-center gap-2 rounded-full border bg-card/90 backdrop-blur-3xl px-5 py-2 text-sm font-medium text-foreground shadow-[0_0_10px_3px] shadow-primary/5 hover:bg-muted transition-colors cursor-pointer"
+                        >
+                            {expanded ? (
+                                <>
+                                    Show less
+                                    <ChevronUp className="size-4" />
+                                </>
+                            ) : (
+                                <>
+                                    See more ({projects.length - INITIAL_COUNT})
+                                    <ChevronDown className="size-4" />
+                                </>
+                            )}
+                        </button>
+                    </div>
+                )}
             </div>
         </section>
     );
 }
-
