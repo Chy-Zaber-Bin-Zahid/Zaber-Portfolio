@@ -119,7 +119,7 @@ export default function RecommendationsSection() {
           </div>
         </div>
 
-        <div className="relative max-w-[800px] mx-auto w-full">
+        <div className="relative w-full mx-auto">
           <div className="overflow-hidden rounded-xl">
             <div
               className="flex transition-transform duration-500 ease-out"
