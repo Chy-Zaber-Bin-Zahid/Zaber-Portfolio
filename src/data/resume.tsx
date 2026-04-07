@@ -40,7 +40,7 @@ export const DATA = {
   description:
     "Full-Stack Software Engineer with 1+ year of professional experience in web development and AI, specializing in building scalable applications and solving real-world problems.",
   summary:
-    "I'm a Full-Stack Software Engineer currently working as an Associate Software Engineer at [FIGLAB](#work), where I build scalable web applications and explore AI-powered tooling. Previously, I interned at [Monstarlab](#work) on production HRMS software. I graduated from [BRAC University](#education) with a B.Sc. in Computer Science. I love building things across the stack — from Next.js page-builders and Electron desktop apps to backend APIs with Node, Nest, and Postgres — and I'm always experimenting with new tools and ideas.",
+    "Currently, I work as an Associate Software Engineer at [FIGLAB](#work), where I contribute to building and optimizing modern web solutions. Previously, I interned as a Software Engineering Intern at [Monstarlab](#work), worked as a Front-end Developer Intern at [6sense Technologies](#work), and served as a Junior Software Engineer at [W3 Engineers Ltd](#work), gaining valuable real-world development experience.",
   avatarUrl: "/me.jpeg",
   skills: [
     { name: "TypeScript", icon: SiTypescript },
@@ -85,7 +85,7 @@ export const DATA = {
       },
       LinkedIn: {
         name: "LinkedIn",
-        url: "https://www.linkedin.com/",
+        url: "https://www.linkedin.com/in/chowdhury-zaber-bin-zahid/",
         icon: Icons.linkedin,
         navbar: true,
       },
@@ -123,6 +123,30 @@ export const DATA = {
       description:
         "Worked on the existing Next.js frontend of MonstarPeople (HRMS), focusing on usability and stability improvements. Implemented subscription-based workflows and frontend integrations. Researched and selected localization solutions for scalable multi-language support. Collaborated through Git and GitHub using rebasing, cherry-picking, pull requests, merges, and code reviews.",
     },
+    {
+      company: "W3 Engineers Ltd.",
+      href: "#",
+      badges: [],
+      location: "Dhaka, Bangladesh (Onsite)",
+      title: "Junior Software Engineer",
+      logoUrl: "/w3engineers.jpeg",
+      start: "November 2024",
+      end: "May 2025",
+      description:
+        "Worked as a Junior Software Engineer building and maintaining production web applications.",
+    },
+    {
+      company: "6sense HQ",
+      href: "#",
+      badges: [],
+      location: "Dhaka, Bangladesh (Onsite)",
+      title: "Front-end Developer Intern",
+      logoUrl: "/6sense.png",
+      start: "March 2024",
+      end: "May 2024",
+      description:
+        "Front-end developer intern building and improving UI features for production web applications.",
+    },
   ],
   education: [
     {
@@ -130,8 +154,8 @@ export const DATA = {
       href: "https://www.bracu.ac.bd/",
       degree: "B.Sc. in Computer Science (CGPA: 3.52 / 4.00)",
       logoUrl: "/bracu.jpg",
-      start: "2020",
-      end: "2024",
+      start: "May 2020",
+      end: "June 2024",
     },
   ],
   projects: [
