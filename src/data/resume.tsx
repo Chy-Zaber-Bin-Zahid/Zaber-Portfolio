@@ -398,5 +398,26 @@ export const DATA = {
       video: "",
     },
   ],
+  recommendations: [
+    {
+      name: "Azmul Hossain",
+      avatarUrl: "/azmul.jpeg",
+      title:
+        "Senior Software Engineer with 9+ years' experience, built 10+ live websites using cutting-edge tech. Skilled in team leading and consulting, collaborated with developers in Europe, America, and Japan.",
+      relationship: "Azmul was Chowdhury Zaber's mentor",
+      date: "March 4, 2026",
+      message:
+        "I had the chance to work with and mentor Zaber during his 2.5-month internship at Monstarlab BD. During that time, he showed a lot of patience, dedication, and a strong sense of ownership in his work. For example, he would identify bugs or areas for improvement on his own, report them to the team, and start working on them immediately. He was proactive, reliable, and picked up tasks quickly, making him an excellent team member.",
+    },
+    {
+      name: "Muhammad Abul Hasan",
+      avatarUrl: "/hasan.png",
+      title: "Founder & Director at Elevate Education",
+      relationship: "Muhammad was Chowdhury Zaber's client",
+      date: "February 23, 2026",
+      message:
+        "When I was looking to develop a software solution for my IELTS institute, where students could practice and take tests, I reached out to Zaber. From the very beginning, he agreed to take on the project with confidence and a positive attitude.\n\nAt that time, I was extremely busy and could only provide him with a basic outline of what I needed. Despite my limited availability, Zaber was incredibly patient and flexible. He even arranged late night meetings to accommodate my schedule, which I truly appreciated.\n\nTo be honest, I had some doubts about the final outcome, but those doubts disappeared the moment I saw the finished product. He not only followed all my instructions carefully but also went beyond them by adding valuable features after doing his own research. The final software was far better than I had initially expected.\n\nAfter implementing the software in our classes and mock tests, the feedback has been outstanding. Our students consistently mention that the experience feels very similar to the actual IELTS exam, which was exactly our goal.\n\nWhat impresses me even more is his ongoing support. Whenever I face any issues, he responds promptly and solves them with great patience. He has resolved several critical problems that we thought would be impossible to fix, yet he handled them with ease.\n\nWe have been using this software for the past few months, and it has had a significant positive impact on our institute. I am genuinely satisfied with Zaber's work and professionalism, and we are already planning to collaborate with him on future projects.\n\nI highly recommend Zaber to anyone looking for a skilled, dedicated, and dependable software developer.",
+    },
+  ],
   hackathons: [],
 } as const;
