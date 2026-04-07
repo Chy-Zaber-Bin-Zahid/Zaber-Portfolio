@@ -3,14 +3,29 @@
 
 import { useState } from "react";
 import { DATA } from "@/data/resume";
-import { Quote, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  Quote,
+  ChevronDown,
+  ChevronUp,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
 const PREVIEW_CHARS = 280;
+
+type Recommendation = {
+  name: string;
+  avatarUrl: string;
+  title: string;
+  relationship: string;
+  date: string;
+  message: string;
+};
 
 function RecommendationCard({
   recommendation,
 }: {
-  recommendation: (typeof DATA.recommendations)[number];
+  recommendation: Recommendation;
 }) {
   const [expanded, setExpanded] = useState(false);
   const isLong = recommendation.message.length > PREVIEW_CHARS;
@@ -20,7 +35,7 @@ function RecommendationCard({
       : recommendation.message.slice(0, PREVIEW_CHARS).trimEnd() + "…";
 
   return (
-    <div className="relative border bg-card rounded-xl p-6 ring-2 ring-border/20 shadow-sm flex flex-col gap-4">
+    <div className="relative border bg-card rounded-xl p-6 ring-2 ring-border/20 shadow-sm flex flex-col gap-4 h-full">
       <Quote className="absolute top-4 right-4 size-6 text-muted-foreground/30" />
       <div className="flex items-start gap-3">
         {recommendation.avatarUrl ? (
@@ -73,6 +88,13 @@ function RecommendationCard({
 }
 
 export default function RecommendationsSection() {
+  const recommendations = DATA.recommendations;
+  const [index, setIndex] = useState(0);
+  const total = recommendations.length;
+
+  const goPrev = () => setIndex((i) => (i - 1 + total) % total);
+  const goNext = () => setIndex((i) => (i + 1) % total);
+
   return (
     <section id="recommendations">
       <div className="flex min-h-0 flex-col gap-y-8">
@@ -96,11 +118,60 @@ export default function RecommendationsSection() {
             </p>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-[800px] mx-auto w-full">
-          {DATA.recommendations.map((rec) => (
-            <RecommendationCard key={rec.name} recommendation={rec} />
-          ))}
+
+        <div className="relative max-w-[800px] mx-auto w-full">
+          <div className="overflow-hidden rounded-xl">
+            <div
+              className="flex transition-transform duration-500 ease-out"
+              style={{ transform: `translateX(-${index * 100}%)` }}
+            >
+              {recommendations.map((rec) => (
+                <div key={rec.name} className="w-full shrink-0 px-1">
+                  <RecommendationCard recommendation={rec} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {total > 1 && (
+            <>
+              <button
+                type="button"
+                onClick={goPrev}
+                aria-label="Previous recommendation"
+                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 md:-translate-x-1/3 size-10 rounded-full border bg-card/90 backdrop-blur-3xl shadow-[0_0_10px_3px] shadow-primary/5 flex items-center justify-center text-foreground hover:bg-muted transition-colors cursor-pointer z-10"
+              >
+                <ChevronLeft className="size-5" />
+              </button>
+              <button
+                type="button"
+                onClick={goNext}
+                aria-label="Next recommendation"
+                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 md:translate-x-1/3 size-10 rounded-full border bg-card/90 backdrop-blur-3xl shadow-[0_0_10px_3px] shadow-primary/5 flex items-center justify-center text-foreground hover:bg-muted transition-colors cursor-pointer z-10"
+              >
+                <ChevronRight className="size-5" />
+              </button>
+            </>
+          )}
         </div>
+
+        {total > 1 && (
+          <div className="flex items-center justify-center gap-2">
+            {recommendations.map((rec, i) => (
+              <button
+                key={rec.name}
+                type="button"
+                onClick={() => setIndex(i)}
+                aria-label={`Go to recommendation ${i + 1}`}
+                className={`h-2 rounded-full transition-all cursor-pointer ${
+                  i === index
+                    ? "w-6 bg-foreground"
+                    : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/60"
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
