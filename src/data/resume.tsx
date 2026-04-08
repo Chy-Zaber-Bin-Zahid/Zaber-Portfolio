@@ -124,6 +124,18 @@ export const DATA = {
         "During my internship, I was assigned to the full-stack team, focusing primarily on frontend development until full-stack tasks became available. I gained practical experience learning the NestJS framework by building a significant practice project to solidify my understanding. Additionally, I learned important software design principles, software development life cycle (SDLC), data structures and algorithms (DSA), and other essential technical concepts.\n\nI contributed to the company's internal product, MonstarPeople — an Employee Attendance Tracking Software — by handling bug fixes, designing pages, and implementing new features such as a subscription system using Next.js. Additionally, I conducted research on localization technologies to identify the best solutions for the project's needs. I also performed technical research on a client project to fully understand their requirements and created comprehensive documentation based on my findings.",
     },
     {
+      company: "CodeSync5",
+      href: "#",
+      badges: [],
+      location: "Dhaka, Bangladesh",
+      title: "Founder",
+      logoUrl: "/codesync.jpg",
+      start: "August 2024",
+      end: "Present",
+      description:
+        "At CodeSync5, I lead the development of the IELTS Exam Portal Desktop Application designed specifically for IELTS coaching centers. The platform facilitates conducting mock, partial, and practice tests for the Reading, Listening, and Writing sections, alongside comprehensive exam and student management features.\n\nAlongside product development, responsibilities include customer acquisition, sales, and ongoing support. The application is currently deployed and actively used by IELTS coaching centers in Sylhet.",
+    },
+    {
       company: "W3 Engineers Ltd.",
       href: "#",
       badges: [],
