@@ -109,7 +109,7 @@ export const DATA = {
       start: "November 2025",
       end: "Present",
       description:
-        "Building scalable full-stack web applications and AI-powered tooling.",
+        "Currently working on the frontend of Klasio (LMS Platform), contributing to the core Klasio Builder. My work includes developing reusable blocks, fixing bugs, and improving performance and usability across the builder experience.\n\nI use AI-assisted development tools such as Cursor and Claude to boost productivity and maintain code quality. Alongside frontend responsibilities, I am learning Laravel to gradually contribute to backend development.",
     },
     {
       company: "Monstarlab",
@@ -121,7 +121,7 @@ export const DATA = {
       start: "July 2025",
       end: "October 2025",
       description:
-        "Worked on the existing Next.js frontend of MonstarPeople (HRMS), focusing on usability and stability improvements. Implemented subscription-based workflows and frontend integrations. Researched and selected localization solutions for scalable multi-language support. Collaborated through Git and GitHub using rebasing, cherry-picking, pull requests, merges, and code reviews.",
+        "During my internship, I was assigned to the full-stack team, focusing primarily on frontend development until full-stack tasks became available. I gained practical experience learning the NestJS framework by building a significant practice project to solidify my understanding. Additionally, I learned important software design principles, software development life cycle (SDLC), data structures and algorithms (DSA), and other essential technical concepts.\n\nI contributed to the company's internal product, MonstarPeople — an Employee Attendance Tracking Software — by handling bug fixes, designing pages, and implementing new features such as a subscription system using Next.js. Additionally, I conducted research on localization technologies to identify the best solutions for the project's needs. I also performed technical research on a client project to fully understand their requirements and created comprehensive documentation based on my findings.",
     },
     {
       company: "W3 Engineers Ltd.",
@@ -133,7 +133,7 @@ export const DATA = {
       start: "November 2024",
       end: "May 2025",
       description:
-        "Worked as a Junior Software Engineer building and maintaining production web applications.",
+        "I worked on the frontend team for an affiliate website project, using vanilla JavaScript and CSS. I fixed several issues with the hotel filter modal, which had numerous bugs and a poor user interface. Additionally, I resolved various problems, including infinite loading issues, date picker malfunctions on mobile devices, etc., improving overall site usability and performance.",
     },
     {
       company: "6sense HQ",
@@ -145,7 +145,7 @@ export const DATA = {
       start: "March 2024",
       end: "May 2024",
       description:
-        "Front-end developer intern building and improving UI features for production web applications.",
+        "Worked with the frontend team under the supervision of the frontend lead, where I learned and practiced Next.js. Subsequently, contributed to a company client project by building pixel-perfect web pages and handling API integration, collaborating closely with the backend team to ensure seamless data communication.",
     },
   ],
   education: [
@@ -162,7 +162,7 @@ export const DATA = {
     {
       title: "Klasio",
       href: "#",
-      dates: "2025",
+      dates: "2026",
       active: true,
       description:
         "AI-powered LMS. Enhanced a custom Next.js page-builder with reusable blocks for better user customization. Conducted R&D on prebuilt blocks, enabling drag-and-drop of blocks containing other blocks with automatic unique ID generation to prevent JSON conflicts. Fixed a long-standing Next.js progress bar issue by upgrading incompatible dependencies to support Next.js 15. Enabled SPA-like interactions by integrating Inertia.js and converting Laravel Blade views to React.",
@@ -205,13 +205,14 @@ export const DATA = {
           icon: <Icons.globe className="size-3" />,
         },
       ],
-      image: "",
+      image: "/monstarpeople-preview.png",
       video: "",
+      scrollableImage: true,
     },
     {
       title: "Elevate Education Exam Portal",
       href: "#",
-      dates: "2024 - 2025",
+      dates: "2025-2026",
       active: true,
       description:
         "Computer-Based IELTS Mock Test App. Developed a cross-platform IELTS exam app supporting offline (SQLite) and online (PostgreSQL/Supabase) modes with Cloudflare R2 storage. Optimized web performance with Redis caching for frequently accessed APIs. Implemented secure copy protection using unique machine IDs and a custom installer wizard. Built an auto-updater via GitHub Releases for seamless desktop updates.",
@@ -255,8 +256,9 @@ export const DATA = {
           icon: <Icons.github className="size-3" />,
         },
       ],
-      image: "",
+      image: "/campus-tutor-preview.png",
       video: "",
+      scrollableImage: true,
     },
     {
       title: "Tech Companies in Bangladesh",
@@ -278,31 +280,9 @@ export const DATA = {
           icon: <Icons.github className="size-3" />,
         },
       ],
-      image: "",
+      image: "/techcobd-preview.png",
       video: "",
-    },
-    {
-      title: "Video Chat App",
-      href: "https://github.com/Chy-Zaber-Bin-Zahid/Video-chat-app",
-      dates: "2025",
-      active: true,
-      description:
-        "Simple peer-to-peer video chat app built with React, Node.js, and WebRTC. Connect with friends instantly by sharing a room ID — no registration required.",
-      technologies: ["React", "Node.js", "WebRTC", "JavaScript"],
-      links: [
-        {
-          type: "Website",
-          href: "https://video-chat-app-gjy8.onrender.com/",
-          icon: <Icons.globe className="size-3" />,
-        },
-        {
-          type: "Source",
-          href: "https://github.com/Chy-Zaber-Bin-Zahid/Video-chat-app",
-          icon: <Icons.github className="size-3" />,
-        },
-      ],
-      image: "",
-      video: "",
+      scrollableImage: true,
     },
     {
       title: "CodeSync5",
@@ -324,13 +304,14 @@ export const DATA = {
           icon: <Icons.github className="size-3" />,
         },
       ],
-      image: "",
+      image: "/codesync5-preview.png",
       video: "",
+      scrollableImage: true,
     },
     {
       title: "Hasan Here",
       href: "https://github.com/Chy-Zaber-Bin-Zahid/Hasan-Here",
-      dates: "2024 - 2025",
+      dates: "2024",
       active: true,
       description:
         "Interactive IELTS preparation website providing users with practice tests for the Reading and Listening sections of the IELTS exam. Built with Next.js and React with a focus on creating an engaging and user-friendly experience for IELTS test-takers.",
@@ -347,31 +328,14 @@ export const DATA = {
           icon: <Icons.github className="size-3" />,
         },
       ],
-      image: "",
+      image: "/hasan-here-preview.png",
       video: "",
-    },
-    {
-      title: "Valorant Match Tracker",
-      href: "https://github.com/Chy-Zaber-Bin-Zahid/Valorant-Match-Tracker",
-      dates: "2024",
-      active: true,
-      description:
-        "Web app that fetches and displays the last 9–10 match history of any Valorant player by providing their in-game name and tag, using the Riot Games API.",
-      technologies: ["JavaScript", "React", "Riot API"],
-      links: [
-        {
-          type: "Source",
-          href: "https://github.com/Chy-Zaber-Bin-Zahid/Valorant-Match-Tracker",
-          icon: <Icons.github className="size-3" />,
-        },
-      ],
-      image: "",
-      video: "",
+      scrollableImage: true,
     },
     {
       title: "Smart Tech",
       href: "https://github.com/Chy-Zaber-Bin-Zahid/Smart-Tech",
-      dates: "2024",
+      dates: "2023",
       active: true,
       description:
         "High-performance MERN-stack e-commerce web app inspired by Bangladesh's renowned Star Tech, featuring product listings, cart, and checkout flows built on MongoDB, Express.js, React, and Node.js.",

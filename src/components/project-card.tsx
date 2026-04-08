@@ -5,8 +5,65 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Markdown from "react-markdown";
+
+function AutoScrollImage({ src, alt, isHovered }: { src: string; alt: string; isHovered: boolean }) {
+  const [imageError, setImageError] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const animationRef = useRef<number>();
+
+  useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (!scrollContainer) return;
+
+    if (isHovered) {
+      let scrollPos = 0;
+      const scrollSpeed = 0.8;
+
+      const animate = () => {
+        if (scrollContainer) {
+          scrollPos += scrollSpeed;
+          const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+          if (scrollPos >= maxScroll) {
+            scrollPos = 0;
+          }
+          scrollContainer.scrollTop = scrollPos;
+          animationRef.current = requestAnimationFrame(animate);
+        }
+      };
+
+      animationRef.current = requestAnimationFrame(animate);
+    } else {
+      // Reset to top when not hovering
+      scrollContainer.scrollTop = 0;
+    }
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [isHovered]);
+
+  if (!src || imageError) {
+    return <div className="w-full h-48 bg-muted" />;
+  }
+
+  return (
+    <div
+      ref={scrollRef}
+      className="overflow-hidden h-48"
+    >
+      <img
+        src={src}
+        alt={alt}
+        className="w-full object-cover"
+        onError={() => setImageError(true)}
+      />
+    </div>
+  );
+}
 
 function ProjectImage({ src, alt }: { src: string; alt: string }) {
   const [imageError, setImageError] = useState(false);
@@ -34,6 +91,7 @@ interface Props {
   link?: string;
   image?: string;
   video?: string;
+  scrollableImage?: boolean;
   links?: readonly {
     icon: React.ReactNode;
     type: string;
@@ -51,17 +109,22 @@ export function ProjectCard({
   link,
   image,
   video,
+  scrollableImage,
   links,
   className,
 }: Props) {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <div
       className={cn(
         "flex flex-col h-full border border-border rounded-xl overflow-hidden hover:ring-2 cursor-pointer hover:ring-muted transition-all duration-200",
         className
       )}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative shrink-0">
+      <div className="relative shrink-0 group">
         <Link
           href={href || "#"}
           target="_blank"
@@ -78,7 +141,11 @@ export function ProjectCard({
               className="w-full h-48 object-cover"
             />
           ) : image ? (
-            <ProjectImage src={image} alt={title} />
+            scrollableImage ? (
+              <AutoScrollImage src={image} alt={title} isHovered={isHovered} />
+            ) : (
+              <ProjectImage src={image} alt={title} />
+            )
           ) : (
             <div className="w-full h-48 bg-muted" />
           )}
@@ -109,7 +176,6 @@ export function ProjectCard({
         <div className="flex items-start justify-between gap-2">
           <div className="flex flex-col gap-1">
             <h3 className="font-semibold">{title}</h3>
-            <time className="text-xs text-muted-foreground">{dates}</time>
           </div>
           <Link
             href={href || "#"}
