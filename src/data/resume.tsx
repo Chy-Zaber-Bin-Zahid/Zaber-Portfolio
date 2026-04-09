@@ -193,8 +193,9 @@ export const DATA = {
           icon: <Icons.globe className="size-3" />,
         },
       ],
-      image: "",
+      image: "/klasio-preview.png",
       video: "",
+      scrollableImage: true,
     },
     {
       title: "MonstarPeople",
