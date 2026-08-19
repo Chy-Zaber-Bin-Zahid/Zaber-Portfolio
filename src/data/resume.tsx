@@ -26,9 +26,13 @@ import {
   SiGithubactions,
   SiCloudflare,
   SiGit,
+  SiJsonwebtokens,
+  SiOpenai,
+  SiLeetcode,
+  SiCodeforces,
 } from "react-icons/si";
 import { FaAws } from "react-icons/fa";
-import { TbApi } from "react-icons/tb";
+import { TbApi, TbDatabaseSearch, TbRobot, TbPrompt } from "react-icons/tb";
 import { GiBearFace } from "react-icons/gi";
 
 export const DATA = {
@@ -38,9 +42,9 @@ export const DATA = {
   location: "Mirpur-6, Dhaka, Bangladesh",
   locationLink: "https://www.google.com/maps/place/Mirpur+6,+Dhaka",
   description:
-    "Full-Stack Software Engineer with 1+ year of professional experience in web development and AI, specializing in building scalable applications and solving real-world problems.",
+    "Full-Stack AI Engineer with 1+ years of professional experience designing, building, and deploying scalable web applications and intelligent, AI-driven systems.",
   summary:
-    "Currently, I work as an Associate Software Engineer at [FIGLAB](#work), where I contribute to building and optimizing modern web solutions. Previously, I interned as a Software Engineering Intern at [Monstarlab](#work), worked as a Front-end Developer Intern at [6sense Technologies](#work), and served as a Junior Software Engineer at [W3 Engineers Ltd](#work), gaining valuable real-world development experience.",
+    "Currently, I work as an Associate Software Engineer at [FIGLAB](#work), where I contribute to building and optimizing modern web solutions. Previously, I interned as a Software Engineering Intern at [Monstarlab](#work), worked as a Front-end Developer Intern at [6sense Technologies](#work), and served as a Junior Software Engineer at [W3 Engineers Ltd](#work), gaining valuable real-world development experience.\n\nI work across modern full-stack architectures (Next.js, MERN) and enjoy bridging intelligent data models with high-performance, secure user experiences \u2014 integrating LLMs, RAG pipelines, and AI agents into [products people actually use](#projects).",
   avatarUrl: "/me.jpeg",
   skills: [
     { name: "TypeScript", icon: SiTypescript },
@@ -67,10 +71,15 @@ export const DATA = {
     { name: "Jest", icon: SiJest },
     { name: "REST", icon: TbApi },
     { name: "GraphQL", icon: SiGraphql },
+    { name: "JWT", icon: SiJsonwebtokens },
     { name: "CI/CD", icon: SiGithubactions },
-    { name: "AWS (EC2, RDS, S3)", icon: FaAws },
+    { name: "AWS (EC2, S3)", icon: FaAws },
     { name: "Cloudflare (R2, D1)", icon: SiCloudflare },
     { name: "Git", icon: SiGit },
+    { name: "OpenAI API", icon: SiOpenai },
+    { name: "RAG", icon: TbDatabaseSearch },
+    { name: "AI Agents", icon: TbRobot },
+    { name: "Prompt Engineering", icon: TbPrompt },
   ],
   navbar: [{ href: "/", icon: HomeIcon, label: "Home" }],
   contact: {
@@ -89,6 +98,18 @@ export const DATA = {
         icon: Icons.linkedin,
         navbar: true,
       },
+      LeetCode: {
+        name: "LeetCode",
+        url: "https://leetcode.com/u/Chy-Zaber-Bin-Zahid/",
+        icon: SiLeetcode,
+        navbar: true,
+      },
+      Codeforces: {
+        name: "Codeforces",
+        url: "https://codeforces.com/profile/Zaber47",
+        icon: SiCodeforces,
+        navbar: true,
+      },
       email: {
         name: "Send Email",
         url: "mailto:chowdhury.zaber.bin.zahid@gmail.com",
@@ -101,7 +122,7 @@ export const DATA = {
   work: [
     {
       company: "FIGLAB",
-      href: "#",
+      href: "https://figlab.io/",
       badges: [],
       location: "Dhaka, Bangladesh",
       title: "Associate Software Engineer",
@@ -113,7 +134,7 @@ export const DATA = {
     },
     {
       company: "Monstarlab",
-      href: "#",
+      href: "https://monstar-lab.com/bd/",
       badges: [],
       location: "Dhaka, Bangladesh",
       title: "Software Engineering Intern",
@@ -125,7 +146,7 @@ export const DATA = {
     },
     {
       company: "CodeSync5",
-      href: "#",
+      href: "https://codesync5.vercel.app/",
       badges: [],
       location: "Dhaka, Bangladesh",
       title: "Founder",
@@ -137,7 +158,7 @@ export const DATA = {
     },
     {
       company: "W3 Engineers Ltd.",
-      href: "#",
+      href: "https://w3engineers.com",
       badges: [],
       location: "Dhaka, Bangladesh (Onsite)",
       title: "Junior Software Engineer",
@@ -173,11 +194,11 @@ export const DATA = {
   projects: [
     {
       title: "Klasio",
-      href: "#",
+      href: "https://klasio.com/",
       dates: "2026",
       active: true,
       description:
-        "AI-powered LMS. Enhanced a custom Next.js page-builder with reusable blocks for better user customization. Conducted R&D on prebuilt blocks, enabling drag-and-drop of blocks containing other blocks with automatic unique ID generation to prevent JSON conflicts. Fixed a long-standing Next.js progress bar issue by upgrading incompatible dependencies to support Next.js 15. Enabled SPA-like interactions by integrating Inertia.js and converting Laravel Blade views to React.",
+        "AI-powered LMS. Enhanced a custom Next.js page builder by developing reusable, configurable content blocks, improving flexibility and reducing page creation time. Researched and implemented a nested drag-and-drop block architecture with automatic unique ID generation, ensuring conflict-free JSON serialization and seamless block duplication. Migrated Laravel Blade views to React with Inertia.js, enabling SPA-like navigation and removing full page reloads. Improved maintainability by refactoring reusable components and simplifying state management, and optimized performance by cutting unnecessary re-renders. Also contributed to the Laravel backend, implementing APIs, business logic, and database operations to support frontend features.",
       technologies: [
         "Next.js",
         "TypeScript",
@@ -189,7 +210,7 @@ export const DATA = {
       links: [
         {
           type: "Live Site",
-          href: "#",
+          href: "https://klasio.com/",
           icon: <Icons.globe className="size-3" />,
         },
       ],
@@ -199,11 +220,11 @@ export const DATA = {
     },
     {
       title: "MonstarPeople",
-      href: "#",
+      href: "https://monstarpeople.com/",
       dates: "2025",
       active: true,
       description:
-        "Employee Attendance Tracking Software and HRMS. Worked on the existing Next.js frontend, focusing on usability and stability improvements. Implemented subscription-based workflows and frontend integrations. Researched and selected localization solutions for scalable multi-language support.",
+        "Employee Attendance Tracking Software and HRMS. Worked on the existing Next.js frontend, focusing on usability and stability improvements. Implemented subscription-based workflows and frontend integrations. Researched and selected localization solutions for scalable multi-language support. Collaborated through Git and GitHub using rebasing, cherry-picking, pull requests, merges, and code reviews.",
       technologies: [
         "Next.js",
         "TypeScript",
@@ -214,7 +235,7 @@ export const DATA = {
       links: [
         {
           type: "Live Site",
-          href: "#",
+          href: "https://monstarpeople.com/",
           icon: <Icons.globe className="size-3" />,
         },
       ],
@@ -224,11 +245,11 @@ export const DATA = {
     },
     {
       title: "Elevate Education Exam Portal",
-      href: "#",
+      href: "https://www.facebook.com/groups/1397792781179832/user/61553812451359?locale=ha_NG",
       dates: "2025-2026",
       active: true,
       description:
-        "Computer-Based IELTS Mock Test App. Developed a cross-platform IELTS exam app supporting offline (SQLite) and online (PostgreSQL/Supabase) modes with Cloudflare R2 storage. Optimized web performance with Redis caching for frequently accessed APIs. Implemented secure copy protection using unique machine IDs and a custom installer wizard. Built an auto-updater via GitHub Releases for seamless desktop updates.",
+        "Computer-Based IELTS Mock Test App. Engineered a cross-platform IELTS mock test platform with offline-first SQLite support, Supabase synchronization, Cloudflare D1 for cloud data management, and Cloudflare R2 for scalable file storage. Optimized web performance with Redis caching for frequently accessed APIs. Implemented secure copy protection using unique machine IDs and a custom installer wizard, plus an auto-updater via GitHub Releases for seamless desktop updates. Designed and deployed a hybrid AI assessment ecosystem leveraging Groq (cloud) and Ollama (local fallback) to automate dynamic question generation and semantic response marking, delivering real-time diagnostic feedback while cutting evaluation latency by 45%.",
       technologies: [
         "Electron",
         "React",
@@ -237,17 +258,21 @@ export const DATA = {
         "SQLite",
         "Supabase",
         "Redis",
+        "Cloudflare D1",
         "Cloudflare R2",
+        "Groq",
+        "Ollama",
       ],
       links: [
         {
           type: "Client Page",
-          href: "#",
+          href: "https://www.facebook.com/groups/1397792781179832/user/61553812451359?locale=ha_NG",
           icon: <Icons.globe className="size-3" />,
         },
       ],
       image: "",
       video: "",
+      scrollableImage: false,
     },
     {
       title: "Campus Tutor",
@@ -255,12 +280,20 @@ export const DATA = {
       dates: "2025",
       active: true,
       description:
-        "Web platform connecting students with campus tutors. Built with Next.js and TypeScript.",
-      technologies: ["Next.js", "TypeScript", "React", "Tailwind CSS"],
+        "Peer-to-peer EdTech platform. Architected an AI-powered RAG chatbot using Cloudflare Vectorize for semantic search, indexing student queries with vector embeddings for fast, context-aware responses. Developed the peer-to-peer tutoring experience with Next.js and Cloudflare services, supporting secure student matching, real-time interactions, and scalable performance. Designed and implemented a role-based access control (RBAC) system with student identity verification to keep the academic community trusted and secure.",
+      technologies: [
+        "Next.js",
+        "TypeScript",
+        "React",
+        "Tailwind CSS",
+        "Cloudflare Vectorize",
+        "RAG",
+        "RBAC",
+      ],
       links: [
         {
-          type: "Website",
-          href: "https://campustutor.vercel.app/",
+          type: "Live Site",
+          href: "https://campustutor.site",
           icon: <Icons.globe className="size-3" />,
         },
         {
@@ -373,6 +406,7 @@ export const DATA = {
       ],
       image: "",
       video: "",
+      scrollableImage: false,
     },
   ],
   recommendations: [

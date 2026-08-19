@@ -11,39 +11,63 @@ import Markdown from "react-markdown";
 function AutoScrollImage({ src, alt, isHovered }: { src: string; alt: string; isHovered: boolean }) {
   const [imageError, setImageError] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     const scrollContainer = scrollRef.current;
     if (!scrollContainer) return;
 
+    const stop = () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = undefined;
+      }
+    };
+
+    stop();
+
     if (isHovered) {
-      let scrollPos = 0;
+      // Pick up from wherever the return animation left off, so re-entering
+      // the card never snaps the image.
+      let scrollPos = scrollContainer.scrollTop;
       const scrollSpeed = 0.8;
 
       const animate = () => {
-        if (scrollContainer) {
-          scrollPos += scrollSpeed;
-          const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
-          if (scrollPos >= maxScroll) {
-            scrollPos = 0;
-          }
-          scrollContainer.scrollTop = scrollPos;
-          animationRef.current = requestAnimationFrame(animate);
+        const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+        if (maxScroll <= 0) return;
+        scrollPos += scrollSpeed;
+        if (scrollPos >= maxScroll) {
+          scrollPos = 0;
         }
+        scrollContainer.scrollTop = scrollPos;
+        animationRef.current = requestAnimationFrame(animate);
       };
 
       animationRef.current = requestAnimationFrame(animate);
     } else {
-      // Reset to top when not hovering
-      scrollContainer.scrollTop = 0;
+      // Ease back to the top instead of snapping there.
+      const from = scrollContainer.scrollTop;
+      if (from <= 0) return;
+
+      const duration = Math.min(700, Math.max(250, from / 1.5));
+      const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+      let startTime: number | undefined;
+
+      const animate = (now: number) => {
+        if (startTime === undefined) startTime = now;
+        const progress = Math.min((now - startTime) / duration, 1);
+        scrollContainer.scrollTop = from * (1 - easeOutCubic(progress));
+        if (progress < 1) {
+          animationRef.current = requestAnimationFrame(animate);
+        } else {
+          animationRef.current = undefined;
+        }
+      };
+
+      animationRef.current = requestAnimationFrame(animate);
     }
 
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
+    return stop;
   }, [isHovered]);
 
   if (!src || imageError) {
