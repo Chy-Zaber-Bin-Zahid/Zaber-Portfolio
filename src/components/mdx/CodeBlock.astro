@@ -1,0 +1,55 @@
+---
+/**
+ * Wraps Shiki-highlighted code fences (rendered at build time) with an
+ * optional title bar and a copy button. Title comes from ```lang title="..."
+ * via the `code-title` transformer in astro.config.mjs.
+ */
+const { "data-title": title, class: className, ...rest } = Astro.props;
+---
+
+<div class="group relative rounded-xl overflow-hidden border border-border my-6 not-prose">
+  {title && (
+    <div class="p-3 text-xs font-medium border-b border-border bg-muted/50 text-foreground">{title}</div>
+  )}
+  <button
+    type="button"
+    data-copy-code
+    data-copied="false"
+    aria-label="Copy code"
+    class:list={[
+      "copy-button absolute right-3 z-10 inline-flex size-8 items-center justify-center rounded-md border border-border bg-background text-primary cursor-pointer opacity-100 lg:opacity-0 lg:group-hover:opacity-100 focus-visible:opacity-100 transition-opacity hover:bg-accent",
+      title ? "top-13" : "top-3",
+    ]}
+  >
+    <svg data-icon="copy" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
+    <svg data-icon="check" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+  </button>
+  <pre {...rest} class:list={[className, "m-0 overflow-x-auto p-3 text-[13px] leading-relaxed font-mono bg-transparent"]}><slot /></pre>
+</div>
+
+<style>
+  .copy-button[data-copied="true"] [data-icon="copy"],
+  .copy-button[data-copied="false"] [data-icon="check"] {
+    display: none;
+  }
+</style>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>("[data-copy-code]");
+  for (const button of buttons) {
+    button.addEventListener("click", async () => {
+      const pre = button.parentElement?.querySelector("pre");
+      const code = pre?.textContent ?? "";
+      try {
+        await navigator.clipboard.writeText(code);
+      } catch (error) {
+        console.error("Failed to copy code:", error);
+        return;
+      }
+      button.dataset.copied = "true";
+      window.setTimeout(() => {
+        button.dataset.copied = "false";
+      }, 2000);
+    });
+  }
+</script>

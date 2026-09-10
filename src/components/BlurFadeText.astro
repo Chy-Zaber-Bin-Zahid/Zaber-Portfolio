@@ -1,0 +1,28 @@
+---
+interface Props {
+  text: string;
+  class?: string;
+  delay?: number;
+  yOffset?: number;
+  duration?: number;
+}
+
+const {
+  text,
+  class: className,
+  delay = 0,
+  yOffset = 8,
+  duration = 0.4,
+} = Astro.props;
+
+const style = [
+  `animation-delay:${delay.toFixed(3)}s`,
+  `animation-duration:${duration}s`,
+  `--blur-fade-y:-${yOffset}px`,
+  `--blur-fade-blur:8px`,
+].join(";");
+---
+
+<div class="flex">
+  <span class:list={["inline-block animate-blur-fade", className]} style={style}>{text}</span>
+</div>

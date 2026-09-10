@@ -1,0 +1,39 @@
+---
+import SectionHeading from "@/components/SectionHeading.astro";
+import OpenSourceCarousel, {
+  type OpenSourceItem,
+} from "@/components/section/open-source-carousel";
+import { DATA } from "@/data/resume";
+import { renderInlineMarkdown } from "@/lib/markdown";
+
+// Only merged pull requests are shown; open/closed ones stay in the data so a
+// status flip is all it takes once they land.
+const contributions = DATA.openSource.filter((c) => c.status === "merged");
+
+const items: OpenSourceItem[] = contributions.map((c) => ({
+  project: c.project,
+  repo: c.repo,
+  repoUrl: c.repoUrl,
+  stars: c.stars,
+  prNumber: c.prNumber,
+  prUrl: c.prUrl,
+  title: c.title,
+  branch: c.branch,
+  status: c.status,
+  date: c.date,
+  mergedBy: c.mergedBy,
+  additions: c.additions,
+  deletions: c.deletions,
+  descriptionHtml: renderInlineMarkdown(c.description),
+  technologies: c.technologies,
+}));
+---
+
+<div class="flex min-h-0 flex-col gap-y-8">
+  <SectionHeading
+    pill="Open Source"
+    title="Contributions to open source"
+    description={`${contributions.length} merged pull requests to public projects, from the Laravel framework to community-run tools and directories.`}
+  />
+  <OpenSourceCarousel client:visible items={items} />
+</div>

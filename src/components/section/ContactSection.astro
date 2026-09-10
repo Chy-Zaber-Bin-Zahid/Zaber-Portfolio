@@ -1,0 +1,121 @@
+---
+import { FlickeringGrid } from "@/components/magicui/flickering-grid";
+import { CalendarDays } from "lucide-react";
+import { Icons } from "@/components/icons";
+import { DATA } from "@/data/resume";
+
+const whatsappHref = `https://wa.me/${DATA.contact.tel.replace(/[^\d]/g, "")}`;
+const calLink = DATA.contact.calLink;
+---
+
+<div class="border rounded-xl p-10 relative">
+  <div class="absolute -top-4 border bg-primary z-10 rounded-xl px-4 py-1 left-1/2 -translate-x-1/2">
+    <span class="text-background text-sm font-medium">Contact</span>
+  </div>
+  <div class="absolute inset-0 top-0 left-0 right-0 h-1/2 rounded-xl overflow-hidden">
+    <FlickeringGrid
+      client:visible
+      className="h-full w-full"
+      squareSize={2}
+      gridGap={2}
+      style={{
+        maskImage: "linear-gradient(to bottom, black, transparent)",
+        WebkitMaskImage: "linear-gradient(to bottom, black, transparent)",
+      }}
+    />
+  </div>
+  <div class="relative flex flex-col items-center gap-6 text-center">
+    <h2 class="text-4xl font-bold tracking-tighter sm:text-6xl">Get in touch</h2>
+    <p class="mx-auto max-w-lg text-muted-foreground text-balance sm:text-lg">
+      Building something, or stuck on something? Let's discuss it.
+    </p>
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mt-2 w-full sm:w-auto">
+      <a
+        href={whatsappHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex h-12 w-full sm:w-auto items-center justify-center gap-2.5 rounded-xl bg-primary px-8 text-base font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      >
+        <Icons.whatsapp className="size-5" />
+        WhatsApp
+      </a>
+      <button
+        type="button"
+        data-cal-namespace="lets-talk"
+        data-cal-link={calLink}
+        data-cal-config='{"layout":"month_view"}'
+        class="inline-flex h-12 w-full sm:w-auto items-center justify-center gap-2.5 rounded-xl border border-border bg-background px-8 text-base font-medium text-foreground shadow-sm transition-colors hover:bg-accent cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      >
+        <CalendarDays className="size-5" aria-hidden />
+        Let's talk
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /**
+   * Cal.com embed (official snippet, wrapped for TypeScript). Opens the
+   * booking page in a modal when any [data-cal-link] element is clicked and
+   * follows the site's light/dark theme.
+   */
+  type CalFn = ((...args: unknown[]) => void) & {
+    loaded?: boolean;
+    ns?: Record<string, CalFn>;
+    q?: unknown[];
+  };
+
+  declare global {
+    interface Window {
+      Cal?: CalFn;
+    }
+  }
+
+  function loadCal(namespace: string) {
+    const w = window;
+    if (!w.Cal) {
+      const script = document.createElement("script");
+      script.src = "https://app.cal.com/embed/embed.js";
+      script.async = true;
+      document.head.appendChild(script);
+
+      const cal = function (...args: unknown[]) {
+        const api = function (...innerArgs: unknown[]) {
+          (api as CalFn).q?.push(innerArgs);
+        } as CalFn;
+        const [action, ns] = args;
+        if (action === "init" && ns && typeof ns === "string") {
+          api.q = api.q ?? [];
+          cal.ns = cal.ns ?? {};
+          cal.ns[ns] = cal.ns[ns] ?? api;
+          (api as CalFn).q?.push(args);
+          return;
+        }
+        cal.q = cal.q ?? [];
+        cal.q.push(args);
+      } as CalFn;
+      cal.q = [];
+      cal.ns = {};
+      cal.loaded = true;
+      w.Cal = cal;
+    }
+
+    w.Cal("init", namespace, { origin: "https://app.cal.com" });
+    const ns = w.Cal.ns?.[namespace];
+    if (!ns) return;
+
+    const applyTheme = () => {
+      const theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
+      ns("ui", { theme, hideEventTypeDetails: false, layout: "month_view" });
+    };
+    applyTheme();
+    new MutationObserver(applyTheme).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+  }
+
+  if (document.querySelector('[data-cal-namespace="lets-talk"]')) {
+    loadCal("lets-talk");
+  }
+</script>

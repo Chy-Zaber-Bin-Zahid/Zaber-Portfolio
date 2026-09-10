@@ -1,23 +1,34 @@
-"use client";
-
-import { Button } from "@/components/ui/button";
-import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
-import { useTheme } from "next-themes";
+import { MoonIcon, SunIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+const STORAGE_KEY = "theme";
+
+/**
+ * Toggles the `.dark` class on <html> and persists the choice.
+ * The initial class is applied by an inline script in BaseLayout before paint.
+ */
 export function ModeToggle({ className }: { className?: string }) {
-  const { theme, setTheme } = useTheme();
+  const toggle = () => {
+    const isDark = document.documentElement.classList.toggle("dark");
+    try {
+      localStorage.setItem(STORAGE_KEY, isDark ? "dark" : "light");
+    } catch {
+      // Storage may be unavailable (private mode); the class toggle still works.
+    }
+  };
 
   return (
-    <Button
+    <button
       type="button"
-      variant="link"
-      size="icon"
-      className={cn(className)}
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      aria-label="Toggle theme"
+      onClick={toggle}
+      className={cn(
+        "inline-flex items-center justify-center rounded-full text-current",
+        className
+      )}
     >
-      <SunIcon className="h-full w-full" />
-      <MoonIcon className="hidden h-full w-full" />
-    </Button>
+      <SunIcon className="h-full w-full dark:hidden" aria-hidden />
+      <MoonIcon className="hidden h-full w-full dark:block" aria-hidden />
+    </button>
   );
 }

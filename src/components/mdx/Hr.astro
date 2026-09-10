@@ -1,0 +1,10 @@
+---
+const props = Astro.props;
+---
+
+<div class="my-10 flex w-full items-center" {...props}>
+  <div
+    class="flex-1 h-px bg-border"
+    style="mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);"
+  ></div>
+</div>

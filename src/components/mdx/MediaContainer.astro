@@ -1,0 +1,18 @@
+---
+interface Props {
+  src: string;
+  alt?: string;
+  type?: "image" | "video";
+  class?: string;
+}
+
+const { src, alt = "", type = "image", class: className = "" } = Astro.props;
+---
+
+<div class:list={["ring-4 ring-muted w-full h-[300px] rounded-lg overflow-hidden flex items-center justify-center not-prose", className]}>
+  {type === "image" ? (
+    <img src={src} alt={alt} loading="lazy" class="w-full h-full object-cover object-center max-w-full max-h-full" />
+  ) : (
+    <video src={src} class="w-full h-full object-cover object-center max-w-full max-h-full" controls></video>
+  )}
+</div>

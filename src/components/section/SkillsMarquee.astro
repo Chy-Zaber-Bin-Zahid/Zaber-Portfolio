@@ -1,0 +1,64 @@
+---
+import { DATA } from "@/data/resume";
+import { skillIcons } from "@/data/icons";
+
+const ROWS = 3;
+const skills = DATA.skills;
+const perRow = Math.ceil(skills.length / ROWS);
+const rows = Array.from({ length: ROWS }, (_, i) =>
+  skills.slice(i * perRow, (i + 1) * perRow)
+);
+---
+
+<div
+  class="flex flex-col gap-3 overflow-hidden"
+  style="mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);"
+>
+  {rows.map((row, rowIndex) => (
+    <div
+      class="marquee group flex w-full overflow-hidden"
+      style={`--marquee-duration:${70 + rowIndex * 12}s;--marquee-direction:${rowIndex % 2 ? "reverse" : "normal"}`}
+    >
+      {[0, 1].map((copy) => (
+        <div class="marquee-track flex shrink-0 items-center gap-3 pr-3" aria-hidden={copy === 1}>
+          {row.map((skill) => {
+            const Icon = skillIcons[skill.icon];
+            return (
+              <div class="flex h-11 shrink-0 items-center gap-2.5 rounded-full border border-border bg-background px-5 ring-2 ring-border/20">
+                <Icon className="size-5 shrink-0" style={{ color: skill.color ?? "currentColor" }} />
+                <span class="whitespace-nowrap text-base font-semibold text-foreground">{skill.name}</span>
+              </div>
+            );
+          })}
+        </div>
+      ))}
+    </div>
+  ))}
+</div>
+
+<style>
+  .marquee-track {
+    will-change: transform;
+    animation: marquee var(--marquee-duration) linear infinite;
+    animation-direction: var(--marquee-direction);
+  }
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+    }
+    .marquee {
+      flex-wrap: wrap;
+    }
+  }
+</style>

@@ -1,0 +1,117 @@
+---
+import type { GetStaticPaths } from "astro";
+import { render } from "astro:content";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import CodeBlock from "@/components/mdx/CodeBlock.astro";
+import Hr from "@/components/mdx/Hr.astro";
+import Table from "@/components/mdx/Table.astro";
+import MediaContainer from "@/components/mdx/MediaContainer.astro";
+import { DATA } from "@/data/resume";
+import { getSortedPosts, type Post } from "@/lib/posts";
+import { formatDate } from "@/lib/utils";
+
+export const getStaticPaths = (async () => {
+  const posts = await getSortedPosts();
+  return posts.map((post, index) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      previousPost: index > 0 ? posts[index - 1] : null,
+      nextPost: index < posts.length - 1 ? posts[index + 1] : null,
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  post: Post;
+  previousPost: Post | null;
+  nextPost: Post | null;
+}
+
+const { post, previousPost, nextPost } = Astro.props;
+const { Content } = await render(post);
+const slug = post.id;
+const ogImage = post.data.image ?? `/blog/${slug}/og.png`;
+
+const jsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: post.data.title,
+  datePublished: post.data.publishedAt,
+  dateModified: post.data.updatedAt ?? post.data.publishedAt,
+  description: post.data.summary,
+  image: new URL(ogImage, Astro.site).toString(),
+  url: new URL(`/blog/${slug}`, Astro.site).toString(),
+  author: { "@type": "Person", name: DATA.name },
+}).replace(/</g, "\\u003c");
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.summary}
+  image={ogImage}
+  type="article"
+  publishedTime={post.data.publishedAt}
+>
+  <script slot="head" type="application/ld+json" is:inline set:html={jsonLd} />
+  <section id="blog">
+    <div class="flex justify-start gap-4 items-center">
+      <a
+        href="/blog"
+        class="text-sm text-muted-foreground hover:text-foreground transition-colors border border-border rounded-lg px-2 py-1 inline-flex items-center gap-1 mb-6 group"
+        aria-label="Back to Blog"
+      >
+        <ChevronLeft className="size-3 group-hover:-translate-x-px transition-transform" />
+        Back to Blog
+      </a>
+    </div>
+    <div class="flex flex-col gap-4">
+      <h1 class="title font-semibold text-3xl md:text-4xl tracking-tighter leading-tight">{post.data.title}</h1>
+      <p class="text-sm text-muted-foreground">{formatDate(post.data.publishedAt)}</p>
+    </div>
+    <div class="my-6 flex w-full items-center">
+      <div
+        class="flex-1 h-px bg-border"
+        style="mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);"
+      ></div>
+    </div>
+    <article class="prose max-w-full text-pretty font-sans leading-relaxed text-muted-foreground dark:prose-invert">
+      <Content components={{ pre: CodeBlock, hr: Hr, table: Table, MediaContainer }} />
+    </article>
+
+    <nav class="mt-12 pt-8 max-w-2xl">
+      <div class="flex flex-col sm:flex-row justify-between gap-4">
+        {previousPost ? (
+          <a
+            href={`/blog/${previousPost.id}`}
+            class="group flex-1 flex flex-col gap-1 p-4 rounded-lg border border-border hover:bg-accent/50 transition-colors"
+          >
+            <span class="flex items-center gap-1 text-xs text-muted-foreground">
+              <ChevronLeft className="size-3" />
+              Previous
+            </span>
+            <span class="text-sm font-medium group-hover:text-foreground transition-colors whitespace-normal wrap-break-word">{previousPost.data.title}</span>
+          </a>
+        ) : (
+          <div class="hidden sm:block flex-1"></div>
+        )}
+
+        {nextPost ? (
+          <a
+            href={`/blog/${nextPost.id}`}
+            class="group flex-1 flex flex-col gap-1 p-4 rounded-lg border border-border hover:bg-accent/50 transition-colors text-right"
+          >
+            <span class="flex items-center justify-end gap-1 text-xs text-muted-foreground">
+              Next
+              <ChevronRight className="size-3" />
+            </span>
+            <span class="text-sm font-medium group-hover:text-foreground transition-colors whitespace-normal wrap-break-word">{nextPost.data.title}</span>
+          </a>
+        ) : (
+          <div class="hidden sm:block flex-1"></div>
+        )}
+      </div>
+    </nav>
+  </section>
+</BaseLayout>

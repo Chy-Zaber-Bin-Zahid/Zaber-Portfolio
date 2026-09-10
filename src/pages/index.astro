@@ -1,0 +1,169 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import BlurFade from "@/components/BlurFade.astro";
+import BlurFadeText from "@/components/BlurFadeText.astro";
+import ContactSection from "@/components/section/ContactSection.astro";
+import SkillsMarquee from "@/components/section/SkillsMarquee.astro";
+import OpenSourceSection from "@/components/section/OpenSourceSection.astro";
+import WorkSection from "@/components/section/work-section";
+import ProjectsSection, { type ProjectItem } from "@/components/section/projects-section";
+import RecommendationsSection from "@/components/section/recommendations-section";
+import { ArrowUpRight } from "lucide-react";
+import { DATA } from "@/data/resume";
+import { renderMarkdown } from "@/lib/markdown";
+
+const BLUR_FADE_DELAY = 0.04;
+
+const summaryHtml = renderMarkdown(DATA.summary);
+
+const projects: ProjectItem[] = DATA.projects.map((project) => ({
+  title: project.title,
+  href: project.href,
+  descriptionHtml: renderMarkdown(project.description),
+  dates: project.dates,
+  tags: project.technologies,
+  image: project.image,
+  video: project.video,
+  scrollableImage: project.scrollableImage,
+  links: project.links,
+}));
+---
+
+<BaseLayout>
+  <main class="min-h-dvh flex flex-col gap-14 relative">
+    <section id="hero">
+      <div class="mx-auto w-full max-w-3xl space-y-8">
+        <div class="gap-2 gap-y-6 flex flex-col md:flex-row justify-between">
+          <div class="gap-2 flex flex-col order-2 md:order-1">
+            <BlurFadeText
+              delay={BLUR_FADE_DELAY}
+              class="text-3xl font-semibold tracking-tighter sm:text-4xl lg:text-5xl"
+              yOffset={8}
+              text={`Hi, I'm ${DATA.name.split(" ")[0]}`}
+            />
+            <BlurFadeText
+              class="text-muted-foreground max-w-[600px] md:text-lg lg:text-xl"
+              delay={BLUR_FADE_DELAY}
+              text={DATA.description}
+            />
+          </div>
+          <BlurFade delay={BLUR_FADE_DELAY} class="order-1 md:order-2">
+            <span class="relative flex size-24 md:size-32 shrink-0 overflow-hidden border rounded-full shadow-lg ring-4 ring-muted bg-muted">
+              <img
+                src={DATA.avatarUrl}
+                alt={DATA.name}
+                width="128"
+                height="128"
+                fetchpriority="high"
+                class="aspect-square h-full w-full object-cover"
+              />
+            </span>
+          </BlurFade>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="flex min-h-0 flex-col gap-y-4">
+        <BlurFade delay={BLUR_FADE_DELAY * 3}>
+          <h2 class="text-xl font-bold">About</h2>
+        </BlurFade>
+        <BlurFade delay={BLUR_FADE_DELAY * 4}>
+          <div
+            class="prose max-w-full text-pretty font-sans leading-relaxed text-muted-foreground dark:prose-invert"
+            set:html={summaryHtml}
+          />
+        </BlurFade>
+      </div>
+    </section>
+
+    <section id="work">
+      <div class="flex min-h-0 flex-col gap-y-6">
+        <BlurFade delay={BLUR_FADE_DELAY * 5}>
+          <h2 class="text-xl font-bold">Work Experience</h2>
+        </BlurFade>
+        <BlurFade delay={BLUR_FADE_DELAY * 6}>
+          <WorkSection client:visible work={DATA.work} />
+        </BlurFade>
+      </div>
+    </section>
+
+    <section id="education">
+      <div class="flex min-h-0 flex-col gap-y-6">
+        <BlurFade delay={BLUR_FADE_DELAY * 7}>
+          <h2 class="text-xl font-bold">Education</h2>
+        </BlurFade>
+        <div class="flex flex-col gap-8">
+          {DATA.education.map((education, index) => (
+            <BlurFade delay={BLUR_FADE_DELAY * 8 + index * 0.05}>
+              <a
+                href={education.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex items-center gap-x-3 justify-between group"
+              >
+                <div class="flex items-center gap-x-3 flex-1 min-w-0">
+                  {education.logoUrl ? (
+                    <img
+                      src={education.logoUrl}
+                      alt={education.school}
+                      loading="lazy"
+                      class="size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border overflow-hidden object-contain flex-none"
+                    />
+                  ) : (
+                    <div class="size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border bg-muted flex-none"></div>
+                  )}
+                  <div class="flex-1 min-w-0 flex flex-col gap-0.5">
+                    <div class="font-semibold leading-none flex items-center gap-2">
+                      {education.school}
+                      <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" aria-hidden />
+                    </div>
+                    <div class="font-sans text-sm text-muted-foreground">{education.degree}</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1 text-xs tabular-nums text-muted-foreground text-right flex-none">
+                  <span>{education.start} - {education.end}</span>
+                </div>
+              </a>
+            </BlurFade>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <div class="flex min-h-0 flex-col gap-y-4">
+        <BlurFade delay={BLUR_FADE_DELAY * 9}>
+          <h2 class="text-xl font-bold">Skills</h2>
+        </BlurFade>
+        <BlurFade delay={BLUR_FADE_DELAY * 10}>
+          <SkillsMarquee />
+        </BlurFade>
+      </div>
+    </section>
+
+    <section id="projects">
+      <BlurFade delay={BLUR_FADE_DELAY * 11}>
+        <ProjectsSection client:visible projects={projects} />
+      </BlurFade>
+    </section>
+
+    <section id="open-source">
+      <BlurFade delay={BLUR_FADE_DELAY * 13}>
+        <OpenSourceSection />
+      </BlurFade>
+    </section>
+
+    <section id="recommendations">
+      <BlurFade delay={BLUR_FADE_DELAY * 15}>
+        <RecommendationsSection client:visible recommendations={DATA.recommendations} />
+      </BlurFade>
+    </section>
+
+    <section id="contact">
+      <BlurFade delay={BLUR_FADE_DELAY * 17}>
+        <ContactSection />
+      </BlurFade>
+    </section>
+  </main>
+</BaseLayout>

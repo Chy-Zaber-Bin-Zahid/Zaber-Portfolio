@@ -1,0 +1,30 @@
+---
+/**
+ * CSS-only port of Magic UI's BlurFade. Runs the fade/blur/slide-in on mount
+ * with a configurable delay so the page needs no client-side JS for it.
+ */
+interface Props {
+  delay?: number;
+  class?: string;
+  yOffset?: number;
+  blur?: string;
+  duration?: number;
+}
+
+const {
+  delay = 0,
+  class: className,
+  yOffset = 6,
+  blur = "6px",
+  duration = 0.4,
+} = Astro.props;
+
+const style = [
+  `animation-delay:${(0.04 + delay).toFixed(3)}s`,
+  `animation-duration:${duration}s`,
+  `--blur-fade-y:-${yOffset}px`,
+  `--blur-fade-blur:${blur}`,
+].join(";");
+---
+
+<div class:list={["animate-blur-fade", className]} style={style}><slot /></div>
