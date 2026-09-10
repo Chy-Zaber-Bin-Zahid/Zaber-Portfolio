@@ -38,11 +38,13 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
           </p>
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 w-full mx-auto auto-rows-fr">
+      {/* Masonry via CSS multi-column: each card keeps its natural height and
+          columns pack tightly. Cards flow top-to-bottom per column. */}
+      <div className="w-full columns-1 gap-3 sm:columns-2">
         {visibleProjects.map((project, id) => (
           <div
             key={project.title}
-            className="h-full animate-blur-fade"
+            className="mb-3 break-inside-avoid animate-blur-fade"
             style={{
               animationDelay: `${0.04 + BLUR_FADE_DELAY * 12 + id * 0.05}s`,
             }}

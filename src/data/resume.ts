@@ -323,30 +323,6 @@ export const DATA = {
       video: "",
       scrollableImage: true,
     },
-    {
-      title: "Smart Tech",
-      href: "https://github.com/Chy-Zaber-Bin-Zahid/Smart-Tech",
-      dates: "2023",
-      active: true,
-      description:
-        "High-performance MERN-stack e-commerce web app inspired by Bangladesh's renowned Star Tech, featuring product listings, cart, and checkout flows built on MongoDB, Express.js, React, and Node.js.",
-      technologies: ["React", "Node.js", "Express", "MongoDB", "JavaScript"],
-      links: [
-        {
-          type: "Website",
-          href: "https://smart-tech-47.netlify.app/",
-          icon: "globe",
-        },
-        {
-          type: "Source",
-          href: "https://github.com/Chy-Zaber-Bin-Zahid/Smart-Tech",
-          icon: "github",
-        },
-      ],
-      image: "",
-      video: "",
-      scrollableImage: false,
-    },
   ],
   /**
    * Pull requests to public repositories I do not own, newest first.
