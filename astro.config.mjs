@@ -2,6 +2,7 @@
 import { defineConfig, fontProviders } from "astro/config";
 import react from "@astrojs/react";
 import mdx from "@astrojs/mdx";
+import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { DATA } from "./src/data/resume";
 import { codeTitleTransformer } from "./src/lib/shiki-code-title";
@@ -10,7 +11,7 @@ import { codeTitleTransformer } from "./src/lib/shiki-code-title";
 export default defineConfig({
   site: DATA.url,
   output: "static",
-  integrations: [react(), mdx()],
+  integrations: [react(), mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
   },

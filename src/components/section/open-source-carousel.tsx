@@ -72,7 +72,7 @@ function ContributionCard({ item }: { item: OpenSourceItem }) {
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
           <div className="flex size-10 flex-none items-center justify-center rounded-full border bg-background text-foreground ring-2 ring-border">
-            <Icons.github className="size-5" />
+            <Icons.github className="size-5" aria-hidden />
           </div>
           <div className="flex min-w-0 flex-col gap-0.5">
             <a
@@ -139,8 +139,8 @@ function ContributionCard({ item }: { item: OpenSourceItem }) {
         <div className="flex items-center gap-1">
           <dt className="sr-only">Diff</dt>
           <dd className="font-mono tabular-nums">
-            <span className="text-emerald-600 dark:text-emerald-400">+{item.additions}</span>{" "}
-            <span className="text-red-600 dark:text-red-400">−{item.deletions}</span>
+            <span className="text-emerald-700 dark:text-emerald-400">+{item.additions}</span>{" "}
+            <span className="text-red-700 dark:text-red-400">−{item.deletions}</span>
           </dd>
         </div>
         <div className="flex items-center gap-1">
@@ -365,6 +365,7 @@ export default function OpenSourceCarousel({ items, speed = 30 }: Props) {
               key={`${item.prUrl}-${i}`}
               data-card
               aria-hidden={i >= items.length}
+              inert={i >= items.length}
               className="w-[min(85vw,360px)] shrink-0"
             >
               <ContributionCard item={item} />

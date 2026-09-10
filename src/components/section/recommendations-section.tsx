@@ -11,7 +11,7 @@ const PREVIEW_CHARS = 280;
 
 export interface Recommendation {
   name: string;
-  avatarUrl: string;
+  avatar: { src: string; width: number; height: number; srcSet?: string } | null;
   title: string;
   relationship: string;
   date: string;
@@ -36,13 +36,17 @@ function RecommendationCard({
 
   return (
     <div className="relative border bg-card rounded-xl p-6 ring-2 ring-border/20 shadow-sm flex flex-col gap-4">
-      <Quote className="absolute top-4 right-4 size-6 text-muted-foreground/30" />
+      <Quote className="absolute top-4 right-4 size-6 text-muted-foreground/30" aria-hidden />
       <div className="flex items-start gap-3">
-        {recommendation.avatarUrl ? (
+        {recommendation.avatar?.src ? (
           <img
-            src={recommendation.avatarUrl}
+            src={recommendation.avatar.src}
+            srcSet={recommendation.avatar.srcSet}
             alt={recommendation.name}
+            width={recommendation.avatar.width || undefined}
+            height={recommendation.avatar.height || undefined}
             loading="lazy"
+            decoding="async"
             className="size-12 rounded-full border ring-2 ring-border object-cover flex-none"
           />
         ) : (
@@ -59,7 +63,7 @@ function RecommendationCard({
           <p className="text-xs text-muted-foreground leading-relaxed">
             {recommendation.title}
           </p>
-          <p className="text-xs text-muted-foreground/80 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             {recommendation.date} · {recommendation.relationship}
           </p>
         </div>
@@ -189,12 +193,17 @@ export default function RecommendationsSection({
               type="button"
               onClick={() => setIndex(i)}
               aria-label={`Go to recommendation ${i + 1}`}
-              className={`h-2 rounded-full transition-all cursor-pointer ${
-                i === index
-                  ? "w-6 bg-foreground"
-                  : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/60"
-              }`}
-            />
+              aria-current={i === index ? "true" : undefined}
+              className="flex h-6 min-w-6 items-center justify-center cursor-pointer"
+            >
+              <span
+                className={`block h-2 rounded-full transition-all ${
+                  i === index
+                    ? "w-6 bg-foreground"
+                    : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/60"
+                }`}
+              />
+            </button>
           ))}
         </div>
       )}

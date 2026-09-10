@@ -11,12 +11,19 @@ const linkIcons = {
 
 export type ProjectLinkIcon = keyof typeof linkIcons;
 
+export interface CardImage {
+  src: string;
+  width: number;
+  height: number;
+  srcSet?: string;
+}
+
 function AutoScrollImage({
-  src,
+  image,
   alt,
   isHovered,
 }: {
-  src: string;
+  image: CardImage;
   alt: string;
   isHovered: boolean;
 }) {
@@ -82,35 +89,43 @@ function AutoScrollImage({
     return stop;
   }, [isHovered]);
 
-  if (!src || imageError) {
+  if (!image.src || imageError) {
     return <div className="w-full h-48 bg-muted" />;
   }
 
   return (
     <div ref={scrollRef} className="overflow-hidden h-48">
       <img
-        src={src}
+        src={image.src}
+        srcSet={image.srcSet}
         alt={alt}
+        width={image.width || undefined}
+        height={image.height || undefined}
         loading="lazy"
-        className="w-full object-cover"
+        decoding="async"
+        className="w-full h-auto object-cover"
         onError={() => setImageError(true)}
       />
     </div>
   );
 }
 
-function ProjectImage({ src, alt }: { src: string; alt: string }) {
+function ProjectImage({ image, alt }: { image: CardImage; alt: string }) {
   const [imageError, setImageError] = useState(false);
 
-  if (!src || imageError) {
+  if (!image.src || imageError) {
     return <div className="w-full h-48 bg-muted" />;
   }
 
   return (
     <img
-      src={src}
+      src={image.src}
+      srcSet={image.srcSet}
       alt={alt}
+      width={image.width || undefined}
+      height={image.height || undefined}
       loading="lazy"
+      decoding="async"
       className="w-full h-48 object-cover"
       onError={() => setImageError(true)}
     />
@@ -124,7 +139,7 @@ export interface ProjectCardProps {
   descriptionHtml: string;
   dates: string;
   tags: readonly string[];
-  image?: string;
+  image?: CardImage | null;
   video?: string;
   scrollableImage?: boolean;
   links?: readonly {
@@ -162,6 +177,7 @@ export function ProjectCard({
           href={href || "#"}
           target="_blank"
           rel="noopener noreferrer"
+          aria-label={`Open ${title}`}
           className="block"
         >
           {video ? (
@@ -175,9 +191,9 @@ export function ProjectCard({
             />
           ) : image ? (
             scrollableImage ? (
-              <AutoScrollImage src={image} alt={title} isHovered={isHovered} />
+              <AutoScrollImage image={image} alt={title} isHovered={isHovered} />
             ) : (
-              <ProjectImage src={image} alt={title} />
+              <ProjectImage image={image} alt={title} />
             )
           ) : (
             <div className="w-full h-48 bg-muted" />
@@ -196,10 +212,10 @@ export function ProjectCard({
                   onClick={(e) => e.stopPropagation()}
                 >
                   <Badge
-                    className="flex items-center gap-1.5 text-xs bg-black text-white hover:bg-black/90"
+                    className="flex h-7 items-center gap-1.5 text-xs bg-black text-white hover:bg-black/90"
                     variant="default"
                   >
-                    <Icon className="size-3" />
+                    <Icon className="size-3" aria-hidden />
                     {link.type}
                   </Badge>
                 </a>

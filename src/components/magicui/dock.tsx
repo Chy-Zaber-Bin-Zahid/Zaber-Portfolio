@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
-import { motion, type MotionValue, useMotionValue, useSpring, useTransform } from "motion/react";
+import { LazyMotion, domAnimation, type MotionValue, useMotionValue, useSpring, useTransform } from "motion/react";
+import * as m from "motion/react-m";
 import { createContext, useContext, useRef, type ReactNode } from "react";
 
 interface DockProps {
@@ -33,15 +34,17 @@ const Dock = ({ className, children, magnification = DEFAULT_MAGNIFICATION, dist
   const mouseX = useMotionValue(Infinity);
 
   return (
-    <DockContext.Provider value={{ mouseX, magnification, distance }}>
-      <motion.div
-        onMouseMove={(e) => mouseX.set(e.pageX)}
-        onMouseLeave={() => mouseX.set(Infinity)}
-        className={cn("mx-auto w-max h-full flex items-end justify-center overflow-visible rounded-full border", className)}
-      >
-        {children}
-      </motion.div>
-    </DockContext.Provider>
+    <LazyMotion features={domAnimation} strict>
+      <DockContext.Provider value={{ mouseX, magnification, distance }}>
+        <m.div
+          onMouseMove={(e) => mouseX.set(e.pageX)}
+          onMouseLeave={() => mouseX.set(Infinity)}
+          className={cn("mx-auto w-max h-full flex items-end justify-center overflow-visible rounded-full border", className)}
+        >
+          {children}
+        </m.div>
+      </DockContext.Provider>
+    </LazyMotion>
   );
 };
 
@@ -70,18 +73,18 @@ const DockIcon = ({ className, children }: DockIconProps) => {
   );
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       style={{ width: containerSize, height: containerSize }}
       className={cn("relative flex aspect-square items-center justify-center rounded-full shrink-0", className)}
     >
-      <motion.div
+      <m.div
         style={{ width: iconSize, height: iconSize }}
         className="flex items-center justify-center"
       >
         {children}
-      </motion.div>
-    </motion.div>
+      </m.div>
+    </m.div>
   );
 };
 

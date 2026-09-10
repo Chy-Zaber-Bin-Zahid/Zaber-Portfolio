@@ -12,7 +12,7 @@ export interface WorkItem {
   company: string;
   href: string;
   title: string;
-  logoUrl: string;
+  logo: { src: string; width: number; height: number; srcSet?: string } | null;
   start: string;
   end?: string;
   description: string;
@@ -22,10 +22,16 @@ interface WorkSectionProps {
   work: readonly WorkItem[];
 }
 
-function LogoImage({ src, alt }: { src: string; alt: string }) {
+function LogoImage({
+  logo,
+  alt,
+}: {
+  logo: WorkItem["logo"];
+  alt: string;
+}) {
   const [imageError, setImageError] = useState(false);
 
-  if (!src || imageError) {
+  if (!logo?.src || imageError) {
     return (
       <div className="size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border bg-muted flex-none" />
     );
@@ -33,8 +39,13 @@ function LogoImage({ src, alt }: { src: string; alt: string }) {
 
   return (
     <img
-      src={src}
+      src={logo.src}
+      srcSet={logo.srcSet}
       alt={alt}
+      width={logo.width || undefined}
+      height={logo.height || undefined}
+      loading="lazy"
+      decoding="async"
       className="size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border overflow-hidden object-contain flex-none"
       onError={() => setImageError(true)}
     />
@@ -53,7 +64,7 @@ export default function WorkSection({ work }: WorkSectionProps) {
           <AccordionTrigger className="hover:no-underline p-0 cursor-pointer transition-colors rounded-none group [&>svg]:hidden">
             <div className="flex items-center gap-x-3 justify-between w-full text-left">
               <div className="flex items-center gap-x-3 flex-1 min-w-0">
-                <LogoImage src={item.logoUrl} alt={item.company} />
+                <LogoImage logo={item.logo} alt={item.company} />
                 <div className="flex-1 min-w-0 gap-0.5 flex flex-col">
                   <div className="font-semibold leading-none flex items-center gap-2">
                     {item.company}

@@ -11,26 +11,74 @@ import RecommendationsSection from "@/components/section/recommendations-section
 import { ArrowUpRight } from "lucide-react";
 import { DATA } from "@/data/resume";
 import { renderMarkdown } from "@/lib/markdown";
+import { imageSource, optimizeImage } from "@/lib/images";
+import { Image } from "astro:assets";
 
 const BLUR_FADE_DELAY = 0.04;
 
 const summaryHtml = renderMarkdown(DATA.summary);
+const avatar = imageSource(DATA.avatarUrl);
+const avatarForSchema = await optimizeImage(DATA.avatarUrl, 256, { format: "jpeg", quality: 85 });
 
-const projects: ProjectItem[] = DATA.projects.map((project) => ({
-  title: project.title,
-  href: project.href,
-  descriptionHtml: renderMarkdown(project.description),
-  dates: project.dates,
-  tags: project.technologies,
-  image: project.image,
-  video: project.video,
-  scrollableImage: project.scrollableImage,
-  links: project.links,
-}));
+const projects: ProjectItem[] = await Promise.all(
+  DATA.projects.map(async (project) => ({
+    title: project.title,
+    href: project.href,
+    descriptionHtml: renderMarkdown(project.description),
+    dates: project.dates,
+    tags: project.technologies,
+    image: await optimizeImage(project.image, 360, { quality: 72 }),
+    video: project.video,
+    scrollableImage: project.scrollableImage,
+    links: project.links,
+  }))
+);
+
+const work = await Promise.all(
+  DATA.work.map(async (item) => ({
+    company: item.company,
+    href: item.href,
+    title: item.title,
+    logo: await optimizeImage(item.logoUrl, 40),
+    start: item.start,
+    end: item.end,
+    description: item.description,
+  }))
+);
+
+const recommendations = await Promise.all(
+  DATA.recommendations.map(async (rec) => ({
+    name: rec.name,
+    avatar: await optimizeImage(rec.avatarUrl, 48),
+    title: rec.title,
+    relationship: rec.relationship,
+    date: rec.date,
+    message: rec.message,
+  }))
+);
+
+const personJsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Chowdhury Zaber Bin Zahid",
+  alternateName: DATA.name,
+  url: DATA.url,
+  image: new URL(avatarForSchema?.src ?? DATA.avatarUrl, DATA.url).toString(),
+  jobTitle: "Full-Stack AI Engineer",
+  worksFor: { "@type": "Organization", name: DATA.work[0].company, url: DATA.work[0].href },
+  alumniOf: { "@type": "CollegeOrUniversity", name: DATA.education[0].school, url: DATA.education[0].href },
+  address: { "@type": "PostalAddress", addressLocality: "Dhaka", addressCountry: "BD" },
+  email: `mailto:${DATA.contact.email}`,
+  sameAs: Object.values(DATA.contact.social)
+    .map((s) => s.url)
+    .filter((u) => u.startsWith("http")),
+  knowsAbout: DATA.skills.map((s) => s.name),
+}).replace(/</g, "\\u003c");
 ---
 
 <BaseLayout>
-  <main class="min-h-dvh flex flex-col gap-14 relative">
+  <script slot="head" type="application/ld+json" is:inline set:html={personJsonLd} />
+  <div class="min-h-dvh flex flex-col gap-14 relative">
     <section id="hero">
       <div class="mx-auto w-full max-w-3xl space-y-8">
         <div class="gap-2 gap-y-6 flex flex-col md:flex-row justify-between">
@@ -49,14 +97,21 @@ const projects: ProjectItem[] = DATA.projects.map((project) => ({
           </div>
           <BlurFade delay={BLUR_FADE_DELAY} class="order-1 md:order-2">
             <span class="relative flex size-24 md:size-32 shrink-0 overflow-hidden border rounded-full shadow-lg ring-4 ring-muted bg-muted">
-              <img
-                src={DATA.avatarUrl}
-                alt={DATA.name}
-                width="128"
-                height="128"
-                fetchpriority="high"
-                class="aspect-square h-full w-full object-cover"
-              />
+              {avatar ? (
+                <Image
+                  src={avatar}
+                  alt={DATA.name}
+                  width={128}
+                  height={128}
+                  densities={[1, 2, 3]}
+                  format="webp"
+                  loading="eager"
+                  fetchpriority="high"
+                  class="aspect-square h-full w-full object-cover"
+                />
+              ) : (
+                <img src={DATA.avatarUrl} alt={DATA.name} width="128" height="128" class="aspect-square h-full w-full object-cover" />
+              )}
             </span>
           </BlurFade>
         </div>
@@ -83,7 +138,7 @@ const projects: ProjectItem[] = DATA.projects.map((project) => ({
           <h2 class="text-xl font-bold">Work Experience</h2>
         </BlurFade>
         <BlurFade delay={BLUR_FADE_DELAY * 6}>
-          <WorkSection client:visible work={DATA.work} />
+          <WorkSection client:visible work={work} />
         </BlurFade>
       </div>
     </section>
@@ -94,7 +149,9 @@ const projects: ProjectItem[] = DATA.projects.map((project) => ({
           <h2 class="text-xl font-bold">Education</h2>
         </BlurFade>
         <div class="flex flex-col gap-8">
-          {DATA.education.map((education, index) => (
+          {DATA.education.map((education, index) => {
+            const logo = imageSource(education.logoUrl);
+            return (
             <BlurFade delay={BLUR_FADE_DELAY * 8 + index * 0.05}>
               <a
                 href={education.href}
@@ -103,10 +160,14 @@ const projects: ProjectItem[] = DATA.projects.map((project) => ({
                 class="flex items-center gap-x-3 justify-between group"
               >
                 <div class="flex items-center gap-x-3 flex-1 min-w-0">
-                  {education.logoUrl ? (
-                    <img
-                      src={education.logoUrl}
+                  {logo ? (
+                    <Image
+                      src={logo}
                       alt={education.school}
+                      width={40}
+                      height={40}
+                      densities={[1, 2]}
+                      format="webp"
                       loading="lazy"
                       class="size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border overflow-hidden object-contain flex-none"
                     />
@@ -126,7 +187,8 @@ const projects: ProjectItem[] = DATA.projects.map((project) => ({
                 </div>
               </a>
             </BlurFade>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
@@ -156,7 +218,7 @@ const projects: ProjectItem[] = DATA.projects.map((project) => ({
 
     <section id="recommendations">
       <BlurFade delay={BLUR_FADE_DELAY * 15}>
-        <RecommendationsSection client:visible recommendations={DATA.recommendations} />
+        <RecommendationsSection client:visible recommendations={recommendations} />
       </BlurFade>
     </section>
 
@@ -165,5 +227,5 @@ const projects: ProjectItem[] = DATA.projects.map((project) => ({
         <ContactSection />
       </BlurFade>
     </section>
-  </main>
+  </div>
 </BaseLayout>

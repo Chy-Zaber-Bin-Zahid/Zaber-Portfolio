@@ -41,9 +41,8 @@ const calLink = DATA.contact.calLink;
       </a>
       <button
         type="button"
-        data-cal-namespace="lets-talk"
+        data-cal-trigger
         data-cal-link={calLink}
-        data-cal-config='{"layout":"month_view"}'
         class="inline-flex h-12 w-full sm:w-auto items-center justify-center gap-2.5 rounded-xl border border-border bg-background px-8 text-base font-medium text-foreground shadow-sm transition-colors hover:bg-accent cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
         <CalendarDays className="size-5" aria-hidden />
@@ -55,8 +54,9 @@ const calLink = DATA.contact.calLink;
 
 <script>
   /**
-   * Cal.com embed (official snippet, wrapped for TypeScript). Opens the
-   * booking page in a modal when any [data-cal-link] element is clicked and
+   * Cal.com embed, loaded on first interaction with the "Let's talk" button
+   * rather than on page load, so the third-party script (and its cookies)
+   * never run for visitors who do not book. Opens the booking modal and
    * follows the site's light/dark theme.
    */
   type CalFn = ((...args: unknown[]) => void) & {
@@ -71,51 +71,79 @@ const calLink = DATA.contact.calLink;
     }
   }
 
-  function loadCal(namespace: string) {
+  const NAMESPACE = "lets-talk";
+  let loading: Promise<CalFn> | null = null;
+
+  function installStub(): CalFn {
     const w = window;
-    if (!w.Cal) {
+    if (w.Cal) return w.Cal;
+    const cal = function (...args: unknown[]) {
+      const api = function (...innerArgs: unknown[]) {
+        (api as CalFn).q?.push(innerArgs);
+      } as CalFn;
+      const [action, ns] = args;
+      if (action === "init" && ns && typeof ns === "string") {
+        api.q = api.q ?? [];
+        cal.ns = cal.ns ?? {};
+        cal.ns[ns] = cal.ns[ns] ?? api;
+        (api as CalFn).q?.push(args);
+        return;
+      }
+      cal.q = cal.q ?? [];
+      cal.q.push(args);
+    } as CalFn;
+    cal.q = [];
+    cal.ns = {};
+    cal.loaded = true;
+    w.Cal = cal;
+    return cal;
+  }
+
+  function currentTheme() {
+    return document.documentElement.classList.contains("dark") ? "dark" : "light";
+  }
+
+  function loadCal(): Promise<CalFn> {
+    if (loading) return loading;
+    loading = new Promise((resolve, reject) => {
+      const cal = installStub();
       const script = document.createElement("script");
       script.src = "https://app.cal.com/embed/embed.js";
       script.async = true;
+      script.onload = () => resolve(cal);
+      script.onerror = () => reject(new Error("Failed to load Cal.com embed"));
       document.head.appendChild(script);
 
-      const cal = function (...args: unknown[]) {
-        const api = function (...innerArgs: unknown[]) {
-          (api as CalFn).q?.push(innerArgs);
-        } as CalFn;
-        const [action, ns] = args;
-        if (action === "init" && ns && typeof ns === "string") {
-          api.q = api.q ?? [];
-          cal.ns = cal.ns ?? {};
-          cal.ns[ns] = cal.ns[ns] ?? api;
-          (api as CalFn).q?.push(args);
-          return;
-        }
-        cal.q = cal.q ?? [];
-        cal.q.push(args);
-      } as CalFn;
-      cal.q = [];
-      cal.ns = {};
-      cal.loaded = true;
-      w.Cal = cal;
-    }
-
-    w.Cal("init", namespace, { origin: "https://app.cal.com" });
-    const ns = w.Cal.ns?.[namespace];
-    if (!ns) return;
-
-    const applyTheme = () => {
-      const theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
-      ns("ui", { theme, hideEventTypeDetails: false, layout: "month_view" });
-    };
-    applyTheme();
-    new MutationObserver(applyTheme).observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
+      cal("init", NAMESPACE, { origin: "https://app.cal.com" });
+      const ns = cal.ns?.[NAMESPACE];
+      if (ns) {
+        ns("ui", { theme: currentTheme(), hideEventTypeDetails: false, layout: "month_view" });
+        new MutationObserver(() => ns("ui", { theme: currentTheme() })).observe(
+          document.documentElement,
+          { attributes: true, attributeFilter: ["class"] }
+        );
+      }
     });
+    return loading;
   }
 
-  if (document.querySelector('[data-cal-namespace="lets-talk"]')) {
-    loadCal("lets-talk");
+  const trigger = document.querySelector<HTMLButtonElement>("[data-cal-trigger]");
+  if (trigger) {
+    const calLink = trigger.dataset.calLink ?? "";
+    // Warm the embed when the visitor shows intent, so the click feels instant.
+    const warm = () => void loadCal().catch(() => {});
+    trigger.addEventListener("pointerenter", warm, { once: true });
+    trigger.addEventListener("focus", warm, { once: true });
+    trigger.addEventListener("click", async () => {
+      trigger.disabled = true;
+      try {
+        const cal = await loadCal();
+        cal.ns?.[NAMESPACE]?.("modal", { calLink, config: { layout: "month_view" } });
+      } catch {
+        window.open(`https://cal.com/${calLink}`, "_blank", "noopener");
+      } finally {
+        trigger.disabled = false;
+      }
+    });
   }
 </script>

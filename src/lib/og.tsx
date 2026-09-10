@@ -19,7 +19,7 @@ interface OgOptions {
 // project root (the build's working directory) rather than import.meta.url.
 const ROOT = process.cwd();
 const FONTS_DIR = path.join(ROOT, "src/assets/fonts");
-const PUBLIC_DIR = path.join(ROOT, "public");
+const IMAGES_DIR = path.join(ROOT, "src/assets/images");
 
 let fontCache: { cabinetGrotesk: Buffer; clashDisplay: Buffer } | null = null;
 let avatarCache: string | null = null;
@@ -37,7 +37,7 @@ async function loadFonts() {
 
 async function loadAvatar() {
   if (avatarCache === null) {
-    const file = await readFile(path.join(PUBLIC_DIR, DATA.avatarUrl));
+    const file = await readFile(path.join(IMAGES_DIR, DATA.avatarUrl));
     avatarCache = `data:image/jpeg;base64,${file.toString("base64")}`;
   }
   return avatarCache;

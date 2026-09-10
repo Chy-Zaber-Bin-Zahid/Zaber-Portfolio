@@ -162,7 +162,7 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
     if (!ctx) return
 
     let animationFrameId: number
-    let gridParams: ReturnType<typeof setupCanvas>
+    let gridParams!: ReturnType<typeof setupCanvas>
 
     const updateCanvasSize = () => {
       const newWidth = width || container.clientWidth
@@ -173,12 +173,22 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
 
     updateCanvasSize()
 
+    // Throttle redraws: the flicker reads the same at ~20fps and this keeps
+    // the canvas off the main thread for most frames on slower devices.
+    const FRAME_INTERVAL = 1000 / 20
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     let lastTime = 0
+    let lastDraw = 0
     const animate = (time: number) => {
       if (!isInView) return
 
+      if (time - lastDraw < FRAME_INTERVAL) {
+        animationFrameId = requestAnimationFrame(animate)
+        return
+      }
       const deltaTime = (time - lastTime) / 1000
       lastTime = time
+      lastDraw = time
 
       updateSquares(gridParams.squares, deltaTime)
       drawGrid(
@@ -209,7 +219,12 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
     intersectionObserver.observe(canvas)
 
     if (isInView) {
-      animationFrameId = requestAnimationFrame(animate)
+      if (reducedMotion) {
+        // Draw a single static frame instead of animating.
+        drawGrid(ctx, canvas.width, canvas.height, gridParams.cols, gridParams.rows, gridParams.squares, gridParams.dpr)
+      } else {
+        animationFrameId = requestAnimationFrame(animate)
+      }
     }
 
     return () => {

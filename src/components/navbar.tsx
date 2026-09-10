@@ -39,7 +39,7 @@ function DockLink({ href, label, icon }: NavLink) {
           rel={isExternal ? "noopener noreferrer" : undefined}
         >
           <DockIcon className={ICON_BUTTON_CLASS}>
-            <Icon className="size-full rounded-sm overflow-hidden object-contain" />
+            <Icon className="size-full rounded-sm overflow-hidden object-contain" aria-hidden />
           </DockIcon>
         </a>
       </TooltipTrigger>

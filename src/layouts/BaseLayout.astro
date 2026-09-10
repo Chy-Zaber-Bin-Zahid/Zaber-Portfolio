@@ -45,9 +45,16 @@ const socialItems: NavLink[] = Object.values(DATA.contact.social)
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="generator" content={Astro.generator} />
     <meta name="robots" content="index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1c1c1c" media="(prefers-color-scheme: dark)" />
+    <meta name="author" content={DATA.name} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
 
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content={DATA.name} />
@@ -82,7 +89,7 @@ const socialItems: NavLink[] = Object.values(DATA.contact.social)
   <body class="min-h-screen bg-background font-sans antialiased relative">
     <div class="absolute inset-x-0 top-0 h-[100px] overflow-hidden z-0">
       <FlickeringGrid
-        client:load
+        client:idle
         className="h-full w-full"
         squareSize={2}
         gridGap={2}
@@ -92,9 +99,9 @@ const socialItems: NavLink[] = Object.values(DATA.contact.social)
         }}
       />
     </div>
-    <div class="relative z-10 max-w-3xl mx-auto py-12 pb-24 sm:py-24 px-6">
+    <main id="main" class="relative z-10 max-w-3xl mx-auto py-12 pb-24 sm:py-24 px-6">
       <slot />
-    </div>
-    <Navbar client:load items={navItems} socials={socialItems} />
+    </main>
+    <Navbar client:idle items={navItems} socials={socialItems} />
   </body>
 </html>
