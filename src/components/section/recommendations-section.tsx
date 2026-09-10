@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Quote,
   ChevronDown,
@@ -35,7 +35,7 @@ function RecommendationCard({
       : recommendation.message.slice(0, PREVIEW_CHARS).trimEnd() + "…";
 
   return (
-    <div className="relative border bg-card rounded-xl p-6 ring-2 ring-border/20 shadow-sm flex flex-col gap-4 h-full">
+    <div className="relative border bg-card rounded-xl p-6 ring-2 ring-border/20 shadow-sm flex flex-col gap-4">
       <Quote className="absolute top-4 right-4 size-6 text-muted-foreground/30" />
       <div className="flex items-start gap-3">
         {recommendation.avatarUrl ? (
@@ -93,6 +93,20 @@ export default function RecommendationsSection({
 }: RecommendationsSectionProps) {
   const [index, setIndex] = useState(0);
   const total = recommendations.length;
+  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [height, setHeight] = useState<number | undefined>(undefined);
+
+  // Size the viewport to the active slide only, so a long expanded review
+  // does not stretch the neighbouring cards. Follows "Read more" toggles too.
+  useEffect(() => {
+    const slide = slideRefs.current[index];
+    if (!slide) return;
+    const update = () => setHeight(slide.offsetHeight);
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(slide);
+    return () => observer.disconnect();
+  }, [index]);
 
   const goPrev = () => setIndex((i) => (i - 1 + total) % total);
   const goNext = () => setIndex((i) => (i + 1) % total);
@@ -121,13 +135,24 @@ export default function RecommendationsSection({
       </div>
 
       <div className="relative w-full mx-auto">
-        <div className="overflow-hidden rounded-xl">
+        <div
+          className="overflow-hidden rounded-xl transition-[height] duration-300 ease-out"
+          style={{ height }}
+        >
           <div
-            className="flex transition-transform duration-500 ease-out"
+            className="flex items-start transition-transform duration-500 ease-out"
             style={{ transform: `translateX(-${index * 100}%)` }}
           >
-            {recommendations.map((rec) => (
-              <div key={rec.name} className="w-full shrink-0 px-1">
+            {recommendations.map((rec, i) => (
+              <div
+                key={rec.name}
+                ref={(el) => {
+                  slideRefs.current[i] = el;
+                }}
+                className="w-full shrink-0 px-1 py-1"
+                aria-hidden={i !== index}
+                inert={i !== index}
+              >
                 <RecommendationCard recommendation={rec} />
               </div>
             ))}
