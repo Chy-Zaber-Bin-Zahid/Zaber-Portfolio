@@ -518,6 +518,16 @@ export const DATA = {
   ],
   recommendations: [
     {
+      name: "Talha Jubaer",
+      avatarUrl: "/talha.png",
+      title:
+        "Software Engineer | React | NextJS | Angular | .NET (C#) | PostgreSQL",
+      relationship: "Talha was Chowdhury Zaber's mentor",
+      date: "August 11, 2026",
+      message:
+        "I had the opportunity to supervise Chowdhury Zaber Bin Zahid during his three-month internship as a Frontend Intern. During this period, he showed a strong willingness to learn and consistently worked to improve his technical skills.\n\nZaber was able to quickly adapt to our development workflow and contributed to frontend tasks with a good understanding of React, NextJs, Typescript and modern web development practices. He was proactive in asking questions, receptive to guidance, and showed clear growth over the course of the internship.\n\nWhat stood out most was his attitude toward learning and his commitment to completing tasks properly. I believe he has a strong foundation to build upon and the potential to grow into a capable frontend engineer.\n\nI would be happy to recommend Zaber to teams looking for a motivated and dependable software engineer.",
+    },
+    {
       name: "Azmul Hossain",
       avatarUrl: "/azmul.jpeg",
       title:
