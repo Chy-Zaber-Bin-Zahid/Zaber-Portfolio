@@ -31,12 +31,17 @@ import {
   SiJsonwebtokens,
   SiClaude,
   SiOllama,
+  SiCursor,
+  SiPrisma,
+  SiDrizzle,
+  SiVitest,
 } from "react-icons/si";
 import { FaAws } from "react-icons/fa";
 import {
   TbApi,
   TbBrandOpenai,
   TbDatabaseSearch,
+  TbLayoutColumns,
   TbRobot,
   TbPrompt,
 } from "react-icons/tb";
@@ -76,10 +81,15 @@ export const skillIcons = {
   SiJsonwebtokens,
   SiClaude,
   SiOllama,
+  SiCursor,
+  SiPrisma,
+  SiDrizzle,
+  SiVitest,
   FaAws,
   TbBrandOpenai,
   TbApi,
   TbDatabaseSearch,
+  TbLayoutColumns,
   TbRobot,
   TbPrompt,
   GiBearFace,

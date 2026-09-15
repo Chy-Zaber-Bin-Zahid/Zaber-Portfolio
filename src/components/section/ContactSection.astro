@@ -42,7 +42,7 @@ const calLink = DATA.contact.calLink;
       <button
         type="button"
         data-cal-trigger
-        data-cal-link={calLink}
+        data-cal-slug={calLink}
         class="inline-flex h-12 w-full sm:w-auto items-center justify-center gap-2.5 rounded-xl border border-border bg-background px-8 text-base font-medium text-foreground shadow-sm transition-colors hover:bg-accent cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
         <CalendarDays className="size-5" aria-hidden />
@@ -117,32 +117,99 @@ const calLink = DATA.contact.calLink;
       cal("init", NAMESPACE, { origin: "https://app.cal.com" });
       const ns = cal.ns?.[NAMESPACE];
       if (ns) {
-        ns("ui", { theme: currentTheme(), hideEventTypeDetails: false, layout: "month_view" });
-        new MutationObserver(() => ns("ui", { theme: currentTheme() })).observe(
-          document.documentElement,
-          { attributes: true, attributeFilter: ["class"] }
-        );
+        const applyTheme = () => {
+          const theme = currentTheme();
+          // `colorScheme` keeps the booking iframe's color-scheme in step with
+          // the page; a mismatch makes browsers paint the iframe opaque white.
+          ns("ui", { theme, colorScheme: theme, hideEventTypeDetails: false, layout: "month_view" });
+        };
+        applyTheme();
+        new MutationObserver(applyTheme).observe(document.documentElement, {
+          attributes: true,
+          attributeFilter: ["class"],
+        });
       }
     });
     return loading;
   }
 
+  /**
+   * Safety net: the embed sets `overflow: hidden` on <body> while the modal
+   * is open and restores it on close. If its close path is interrupted, the
+   * page stays unscrollable, so restore it ourselves whenever the modal
+   * reports "closed" or disappears.
+   */
+  function watchModalClose() {
+    const restoreScroll = () => {
+      if (document.body.style.overflow === "hidden") document.body.style.overflow = "";
+    };
+    const watchBox = (box: Element) => {
+      new MutationObserver(() => {
+        const state = box.getAttribute("state");
+        // The embed hides a closed modal with `visibility: hidden` on the host.
+        if (state === "closed" || state === "failed" || (box as HTMLElement).style.visibility === "hidden") {
+          setTimeout(restoreScroll, 50);
+        }
+      }).observe(box, { attributes: true, attributeFilter: ["state", "style", "class"] });
+    };
+    document.querySelectorAll("cal-modal-box").forEach(watchBox);
+    new MutationObserver((records) => {
+      for (const record of records) {
+        record.addedNodes.forEach((node) => {
+          if (node instanceof Element && node.tagName === "CAL-MODAL-BOX") watchBox(node);
+        });
+        if (record.removedNodes.length && !document.querySelector("cal-modal-box")) restoreScroll();
+      }
+    }).observe(document.body, { childList: true });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") setTimeout(restoreScroll, 300);
+    });
+  }
+
   const trigger = document.querySelector<HTMLButtonElement>("[data-cal-trigger]");
   if (trigger) {
-    const calLink = trigger.dataset.calLink ?? "";
+    // Deliberately not `data-cal-link`: the embed auto-binds clicks on that
+    // attribute and would open a second, stacked modal on every click.
+    const calLink = trigger.dataset.calSlug ?? "";
     // Warm the embed when the visitor shows intent, so the click feels instant.
     const warm = () => void loadCal().catch(() => {});
+    watchModalClose();
     trigger.addEventListener("pointerenter", warm, { once: true });
     trigger.addEventListener("focus", warm, { once: true });
+    const modals = () => [...document.querySelectorAll<HTMLElement>("cal-modal-box")];
+    const isShowing = (box: HTMLElement) => box.style.visibility !== "hidden";
+
     trigger.addEventListener("click", async () => {
+      // Never stack modals: a second modal captures the scroll lock set by the
+      // first and restores it on close, which leaves the page frozen.
+      if (trigger.disabled || modals().some(isShowing)) return;
       trigger.disabled = true;
       try {
         const cal = await loadCal();
-        cal.ns?.[NAMESPACE]?.("modal", { calLink, config: { layout: "month_view" } });
+        const existing = modals().find((box) =>
+          ["loaded", "reopened"].includes(box.getAttribute("state") ?? "")
+        );
+        if (existing) {
+          // Reuse the already-loaded booking page through the embed's own
+          // "reopened" state instead of building another modal.
+          document.body.style.overflow = "hidden";
+          existing.setAttribute("state", "reopened");
+          return;
+        }
+        // Pass the theme in the modal config too, so the booking iframe is
+        // requested in the right theme instead of waiting for a message.
+        const theme = currentTheme();
+        cal.ns?.[NAMESPACE]?.("modal", {
+          calLink,
+          config: { layout: "month_view", theme, "ui.color-scheme": theme },
+        });
       } catch {
         window.open(`https://cal.com/${calLink}`, "_blank", "noopener");
       } finally {
-        trigger.disabled = false;
+        // Short cooldown so a double-click can't open a second modal.
+        setTimeout(() => {
+          trigger.disabled = false;
+        }, 400);
       }
     });
   }

@@ -20,18 +20,26 @@ const summaryHtml = renderMarkdown(DATA.summary);
 const avatar = imageSource(DATA.avatarUrl);
 const avatarForSchema = await optimizeImage(DATA.avatarUrl, 256, { format: "jpeg", quality: 85 });
 
+/** Split a description into its first sentence and the remainder. */
+function splitSummary(text: string) {
+  const match = text.match(/^(.+?[.!?])\s+([\s\S]*)$/);
+  return match ? { summary: match[1], rest: match[2].trim() } : { summary: text, rest: "" };
+}
+
 const projects: ProjectItem[] = await Promise.all(
-  DATA.projects.map(async (project) => ({
-    title: project.title,
-    href: project.href,
-    descriptionHtml: renderMarkdown(project.description),
-    dates: project.dates,
-    tags: project.technologies,
-    image: await optimizeImage(project.image, 360, { quality: 72 }),
-    video: project.video,
-    scrollableImage: project.scrollableImage,
-    links: project.links,
-  }))
+  DATA.projects.map(async (project) => {
+    const { summary, rest } = splitSummary(project.description);
+    return {
+      title: project.title,
+      href: project.href,
+      summary,
+      detailsHtml: rest ? renderMarkdown(rest) : "",
+      dates: project.dates,
+      tags: project.technologies,
+      image: await optimizeImage(project.image, 640, { quality: 72 }),
+      links: project.links,
+    };
+  })
 );
 
 const work = await Promise.all(
@@ -64,7 +72,7 @@ const personJsonLd = JSON.stringify({
   alternateName: DATA.name,
   url: DATA.url,
   image: new URL(avatarForSchema?.src ?? DATA.avatarUrl, DATA.url).toString(),
-  jobTitle: "Full-Stack AI Engineer",
+  jobTitle: "Software Engineer",
   worksFor: { "@type": "Organization", name: DATA.work[0].company, url: DATA.work[0].href },
   alumniOf: { "@type": "CollegeOrUniversity", name: DATA.education[0].school, url: DATA.education[0].href },
   address: { "@type": "PostalAddress", addressLocality: "Dhaka", addressCountry: "BD" },
