@@ -2,7 +2,7 @@
 
 Personal portfolio and blog of Chowdhury Zaber Bin Zahid, a software engineer from Dhaka, Bangladesh.
 
-**Live:** [portfolio-zaber.vercel.app](https://portfolio-zaber.vercel.app)
+**Live:** [zaber47.vercel.app](https://zaber47.vercel.app)
 
 [![Astro](https://img.shields.io/badge/Astro-7-BC52EE?logo=astro&logoColor=white)](https://astro.build)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
