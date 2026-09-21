@@ -7,7 +7,7 @@
 export const DATA = {
   name: "Zaber Bin Zahid",
   initials: "CZ",
-  url: "https://portfolio-zaber.vercel.app",
+  url: "https://zaber47.vercel.app",
   location: "Mirpur-6, Dhaka, Bangladesh",
   locationLink: "https://www.google.com/maps/place/Mirpur+6,+Dhaka",
   description:

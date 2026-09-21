@@ -22,7 +22,7 @@ const {
   publishedTime,
 } = Astro.props;
 
-const fullTitle = title ? `${title} | ${DATA.name}` : DATA.name;
+const fullTitle = title ? `${title} | ${DATA.name}` : `${DATA.name} – Software Engineer`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(image, Astro.site);
 
@@ -59,7 +59,7 @@ const socialItems: NavLink[] = Object.values(DATA.contact.social)
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content={DATA.name} />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:title" content={title ?? DATA.name} />
+    <meta property="og:title" content={title ?? fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
@@ -68,7 +68,7 @@ const socialItems: NavLink[] = Object.values(DATA.contact.social)
     {publishedTime && <meta property="article:published_time" content={publishedTime} />}
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title ?? DATA.name} />
+    <meta name="twitter:title" content={title ?? fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 

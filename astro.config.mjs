@@ -11,7 +11,12 @@ import { codeTitleTransformer } from "./src/lib/shiki-code-title";
 export default defineConfig({
   site: DATA.url,
   output: "static",
-  integrations: [react(), mdx(), sitemap()],
+  integrations: [
+    react(),
+    mdx(),
+    // The blog has no posts yet, so keep its empty pages out of search.
+    sitemap({ filter: (page) => !page.includes("/blog") }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },
