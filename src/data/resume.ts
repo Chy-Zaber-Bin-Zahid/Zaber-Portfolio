@@ -13,7 +13,7 @@ export const DATA = {
   description:
     "Software Engineer with 1.5+ years of professional experience building scalable web applications, shipping faster through AI-assisted development with Claude, Codex, Cursor, OpenAI, and Conductor.",
   summary:
-    "Currently, I work as an Associate Software Engineer at [FIGLAB](#work), where I contribute to building and optimizing modern web solutions. Previously, I interned as a Software Engineering Intern at [Monstarlab](#work), worked as a Front-end Developer Intern at [6sense Technologies](#work), and served as a Junior Software Engineer at [W3 Engineers Ltd](#work), gaining valuable real-world development experience.\n\nI work across modern full-stack architectures (Next.js, Laravel, MERN) with an AI-assisted workflow, using Claude Code, Codex, Cursor, and Conductor to plan, build, review, and test features faster without cutting corners on quality. I also integrate LLMs, RAG pipelines, and AI agents into [products people actually use](#projects), and contribute to open source, including [merged fixes in the Laravel and Astro frameworks](#open-source).",
+    "Currently, I work as an Associate Software Engineer at [FIGLAB](#work), where I contribute to building and optimizing modern web solutions. Previously, I interned as a Software Engineering Intern at [Monstarlab](#work), worked as a Front-end Developer Intern at [6sense Technologies](#work), and served as a Junior Software Engineer at [W3 Engineers Ltd](#work), gaining valuable real-world development experience.\n\nI work across modern full-stack architectures (Next.js, Laravel, MERN) with an AI-assisted workflow, using Claude Code, Codex, Cursor, and Conductor to plan, build, review, and test features faster without cutting corners on quality. I also integrate LLMs, RAG pipelines, and AI agents into [products people actually use](#projects), and contribute to open source, including [merged fixes in the NestJS, Laravel, and Astro frameworks](#open-source).",
   avatarUrl: "/me.jpeg",
   skills: [
     { name: "Claude Code", icon: "SiClaude", color: "#D97757" },
@@ -452,6 +452,24 @@ export const DATA = {
    * `status` drives the badge: "merged" | "open" | "closed".
    */
   openSource: [
+    {
+      project: "NestJS",
+      repo: "nestjs/nest",
+      repoUrl: "https://github.com/nestjs/nest",
+      stars: 76700,
+      prNumber: 17780,
+      prUrl: "https://github.com/nestjs/nest/pull/17780",
+      title: "Mark parse date pipe options as optional",
+      branch: "master",
+      status: "merged",
+      date: "September 17, 2026",
+      mergedBy: "Kamil Myśliwiec",
+      additions: 22,
+      deletions: 1,
+      description:
+        "Fixed `ParseDatePipe` throwing \"Nest can't resolve dependencies\" at bootstrap when passed by class, the form the docs use for every built-in pipe. It was the only pipe whose `options` argument lacked `@Optional()`, so the injector failed before the `= {}` default could apply. Added the decorator, widened `options` to `protected` to match its siblings, and added regression tests.",
+      technologies: ["TypeScript", "NestJS", "Vitest"],
+    },
     {
       project: "Astro",
       repo: "withastro/astro",
